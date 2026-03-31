@@ -1,0 +1,16 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  font-family: monospace;
+
+  @media (min-width: 600px) {
+    display: grid;
+    grid-template-columns: 1fr auto;
+  }
+}

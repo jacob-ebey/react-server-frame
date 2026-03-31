@@ -1,0 +1,6 @@
+.counter {
+  background: none;
+  border: 2px solid black;
+  padding: 8px 16px;
+  cursor: pointer;
+}

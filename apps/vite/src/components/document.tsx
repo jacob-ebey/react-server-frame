@@ -1,7 +1,8 @@
-import { Suspense } from "react";
-
 import { Frame } from "react-server-frame";
+
 import { routes } from "../routes.ts";
+
+import "./document.css";
 
 export function Document({ children, title }: { children?: React.ReactNode; title: string }) {
   return (
@@ -12,10 +13,8 @@ export function Document({ children, title }: { children?: React.ReactNode; titl
         <title>{title}</title>
       </head>
       <body>
-        {children}
-        <Suspense fallback={<p>Loading sidebar...</p>}>
-          <Frame src={routes.frames.partials.sidebar.href()} />
-        </Suspense>
+        <div>{children}</div>
+        <Frame src={routes.frames.partials.sidebar.href()} />
       </body>
     </html>
   );

@@ -1,8 +1,7 @@
 import { lazy } from "react";
-import { createRouter } from "remix/fetch-router";
-
-import { ProvideFrames, render } from "react-server-frame/vite/frames";
 import { Frame } from "react-server-frame";
+import { ProvideFrames, render } from "react-server-frame/vite/frames";
+import { createRouter } from "remix/fetch-router";
 
 import { routes } from "./routes.ts";
 
