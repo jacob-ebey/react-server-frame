@@ -75,7 +75,7 @@ export function ClientFrame({ children, src }: { children?: React.ReactNode; src
   const frame = useMemo(() => {
     const result = {
       pending,
-      reload: () => startTransition(reload),
+      reload,
     };
 
     return result;
