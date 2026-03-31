@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import { createRouter } from "remix/fetch-router";
 
-import { ProvideFrames, reactServer } from "react-server-frame/vite/frames";
+import { ProvideFrames, render } from "react-server-frame/vite/frames";
 import { Frame } from "react-server-frame";
 
 import { routes } from "./routes.ts";
@@ -13,7 +13,7 @@ const Sidebar = lazy(() => import("./frames/sidebar.tsx"));
 const router = createRouter();
 
 router.get("*", ({ request }) => {
-  return reactServer(
+  return render(
     request,
     <ProvideFrames
       url={request.url}

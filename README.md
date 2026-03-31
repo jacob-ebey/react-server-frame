@@ -26,7 +26,7 @@ export const routes = route({
 const router = createRouter();
 
 router.get("*", ({ request }) => {
-  return reactServer(
+  return render(
     request,
     <ProvideFrames
       url={request.url}

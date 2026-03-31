@@ -1,4 +1,5 @@
 {
+  "name": "vite",
   "private": true,
   "type": "module",
   "scripts": {

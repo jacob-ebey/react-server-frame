@@ -4,7 +4,7 @@ import type { Route } from "remix/fetch-router/routes";
 import { ClientFrame, FetchFrameProvider } from "./frames.client.tsx";
 import type { Payload } from "./generic-payload.ts";
 
-export async function reactServer(
+export async function render(
   createTemporaryReferenceSet: () => unknown,
   renderToReadableStream: (
     payload: any,
