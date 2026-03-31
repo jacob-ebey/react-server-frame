@@ -23,6 +23,7 @@
     "@vitejs/plugin-rsc": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
+    "vite-plugin-devtools-json": "catalog:",
     "vite-plus": "catalog:"
   }
 }
