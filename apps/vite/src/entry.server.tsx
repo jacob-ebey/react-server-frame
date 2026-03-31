@@ -2,8 +2,10 @@ import { lazy } from "react";
 import { Frame } from "react-server-frame";
 import { ProvideFrames, render } from "react-server-frame/vite/frames";
 import { createRouter } from "remix/fetch-router";
+import { createMemoryFileStorage } from "remix/file-storage/memory";
 
 import { routes } from "./routes.ts";
+import { useCacheMiddleware } from "./use-cache-middleware.ts";
 
 const About = lazy(() => import("./frames/about.tsx"));
 const Home = lazy(() => import("./frames/home.tsx"));
@@ -11,23 +13,26 @@ const Sidebar = lazy(() => import("./frames/sidebar.tsx"));
 
 const router = createRouter();
 
-router.get("*", ({ request }) => {
-  return render(
-    request,
-    <ProvideFrames
-      url={request.url}
-      frames={routes.frames}
-      components={{
-        about: About,
-        home: Home,
-        partials: {
-          sidebar: Sidebar,
-        },
-      }}
-    >
-      <Frame src={request.url} />
-    </ProvideFrames>,
-  );
+router.get("*", {
+  middleware: [useCacheMiddleware(createMemoryFileStorage())],
+  handler: ({ request }) => {
+    return render(
+      request,
+      <ProvideFrames
+        url={request.url}
+        frames={routes.frames}
+        components={{
+          about: About,
+          home: Home,
+          partials: {
+            sidebar: Sidebar,
+          },
+        }}
+      >
+        <Frame src={request.url} />
+      </ProvideFrames>,
+    );
+  },
 });
 
 export default {

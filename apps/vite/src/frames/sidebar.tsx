@@ -1,7 +1,11 @@
+import { cacheLife } from "vite-plugin-react-use-cache/runtime";
 import { ReloadSidebar } from "./sidebar.client.tsx";
 import styles from "./sidebar.module.css";
 
 export default async function Sidebar() {
+  "use cache";
+  cacheLife("seconds");
+
   await new Promise((resolve) => setTimeout(resolve, 250));
   return (
     <aside className={styles.sidebar}>

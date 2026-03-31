@@ -19,6 +19,7 @@
     "@babel/core": "catalog:",
     "@rolldown/plugin-babel": "catalog:",
     "@types/babel__core": "catalog:",
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@typescript/native-preview": "catalog:",
@@ -28,6 +29,7 @@
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-devtools-json": "catalog:",
+    "vite-plugin-react-use-cache": "catalog:",
     "vite-plus": "catalog:"
   }
 }
