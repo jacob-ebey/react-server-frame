@@ -1,0 +1,31 @@
+packages:
+  - apps/*
+  - packages/*
+
+catalog:
+  "@types/node": ^24
+  "@types/react": ^19.2.14
+  "@types/react-dom": ^19.2.3
+  "@typescript/native-preview": 7.0.0-dev.20260328.1
+  "@vitejs/plugin-react": ^6.0.1
+  "@vitejs/plugin-rsc": ~0.5.21
+  react: ^19.2.4
+  react-dom: ^19.2.4
+  react-server-dom-webpack: ^19.2.4
+  remix: 3.0.0-alpha.4
+  typescript: ^6.0.2
+  vite: npm:@voidzero-dev/vite-plus-core@latest
+  vite-plus: latest
+  vitest: npm:@voidzero-dev/vite-plus-test@latest
+
+catalogMode: prefer
+overrides:
+  vite: "catalog:"
+  vitest: "catalog:"
+peerDependencyRules:
+  allowAny:
+    - vite
+    - vitest
+  allowedVersions:
+    vite: "*"
+    vitest: "*"
