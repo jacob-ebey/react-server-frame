@@ -5,6 +5,7 @@ import type { Route } from "remix/fetch-router/routes";
 
 import { ClientFrame, FetchFrameProvider } from "./frames.client.tsx";
 import type { Payload } from "./generic-payload.ts";
+import type { Middleware } from "remix/fetch-router";
 
 export class UseServerState {
   formState?: ReactFormState;
@@ -32,6 +33,63 @@ export class RedirectState {
   }
 }
 
+export function useServerMiddleware({
+  createTemporaryReferenceSet,
+  decodeAction,
+  decodeFormState,
+  decodeReply,
+  loadServerAction,
+}: {
+  createTemporaryReferenceSet: () => unknown;
+  decodeAction: (formData: FormData) => Promise<() => Promise<void>>;
+  decodeFormState: (actionResult: unknown, body: FormData) => Promise<ReactFormState | undefined>;
+  decodeReply: (body: string | FormData, options?: object) => Promise<unknown[]>;
+  loadServerAction: (id: string) => Promise<Function>;
+}): Middleware {
+  return async ({ request, set }, next) => {
+    let formState: ReactFormState | undefined;
+    let returnValue: Promise<unknown> | undefined;
+    let temporaryReferences: unknown;
+    let actionStatus: number | undefined;
+
+    if (request.method === "POST") {
+      const actionId = request.headers.get("x-rsc-action");
+
+      if (actionId) {
+        try {
+          const contentType = request.headers.get("content-type");
+          const body = contentType?.startsWith("multipart/form-data")
+            ? await request.formData()
+            : await request.text();
+          temporaryReferences = createTemporaryReferenceSet();
+          const args = await decodeReply(body, { temporaryReferences });
+          const action = await loadServerAction(actionId);
+          returnValue = action.apply(null, args);
+          await returnValue;
+        } catch (e) {
+          actionStatus = 500;
+          returnValue = Promise.reject(e);
+        }
+      } else {
+        try {
+          const formData = await request.formData();
+          const decodedAction = await decodeAction(formData);
+          const result = await decodedAction();
+          formState = await decodeFormState(result, formData);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    set(
+      UseServerState,
+      new UseServerState(formState, returnValue, temporaryReferences, actionStatus),
+    );
+    return next();
+  };
+}
+
 export function redirect(location: string) {
   const ctx = getContext();
   ctx.set(RedirectState, new RedirectState(location));
@@ -48,7 +106,7 @@ export async function render({
   prerender: (body: ReadableStream<Uint8Array>) => Promise<Response>;
   renderToReadableStream: (
     payload: any,
-    options: {
+    options?: {
       temporaryReferences: unknown;
       onError: (error: unknown) => string | undefined;
     },

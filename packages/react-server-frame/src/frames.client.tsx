@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, use, useCallback, useMemo, useRef, useState, useTransition } from "react";
+import type { Payload } from "./generic-payload.ts";
 
 type Frame = {
   pending: boolean;
@@ -80,4 +81,28 @@ export function ClientFrame({ children, src }: { children?: React.ReactNode; src
   }, [pending, reload]);
 
   return <FrameContext.Provider value={frame}>{content}</FrameContext.Provider>;
+}
+
+export async function fetchFrame(
+  url: URL,
+  signal: AbortSignal,
+  createFromFetch: (response: Promise<Response>, options?: object) => Promise<Payload>,
+) {
+  url.pathname += ".rsc";
+  const payload = await createFromFetch(fetch(url, { signal }));
+  if (payload.type === "redirect") {
+    if (window.navigation) {
+      return Promise.resolve(
+        window.navigation.navigate(payload.redirect, {
+          history: "replace",
+        }).finished,
+      ).then(() => {
+        return null as React.ReactNode;
+      });
+    } else {
+      window.location.href = payload.redirect;
+      return;
+    }
+  }
+  return payload.root;
 }

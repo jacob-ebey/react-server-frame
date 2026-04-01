@@ -9,6 +9,7 @@ export default defineConfig({
     exports: true,
     entry: {
       index: "./src/frames.tsx",
+      browser: "./src/browser.tsx",
       client: "./src/frames.client.tsx",
       "vite/fetch-frame": "./src/vite/fetch-frame.ts",
       "vite/frames": "./src/vite/frames.tsx",

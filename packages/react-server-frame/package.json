@@ -19,6 +19,7 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.mjs",
+    "./browser": "./dist/browser.mjs",
     "./client": "./dist/client.mjs",
     "./vite/fetch-frame": "./dist/vite/fetch-frame.mjs",
     "./vite/frames": "./dist/vite/frames.mjs",
