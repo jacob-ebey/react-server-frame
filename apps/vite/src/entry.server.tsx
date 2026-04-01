@@ -30,11 +30,8 @@ const sessionCookie = createCookie("__session", {
 const sessionStorage = createCookieSessionStorage();
 
 const router = createRouter({
-  middleware: [asyncContext()],
-});
-
-router.route("ANY", "*", {
   middleware: [
+    asyncContext(),
     session(sessionCookie, sessionStorage),
     auth({
       schemes: [
@@ -51,9 +48,11 @@ router.route("ANY", "*", {
         }),
       ],
     }),
-    useCacheMiddleware(createMemoryFileStorage()),
-    useServerMiddleware(),
   ],
+});
+
+router.route("ANY", "*", {
+  middleware: [useCacheMiddleware(createMemoryFileStorage()), useServerMiddleware()],
   handler: ({ request }) => {
     return render(
       request,
