@@ -20,7 +20,7 @@ catalog:
   typescript: ^6.0.2
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vite-plugin-devtools-json: ^1.0.0
-  vite-plugin-react-use-cache: 0.0.7
+  vite-plugin-react-use-cache: 0.0.8
   vite-plus: latest
   vitest: npm:@voidzero-dev/vite-plus-test@latest
 

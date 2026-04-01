@@ -3,9 +3,9 @@ import { Frame } from "react-server-frame";
 import { ProvideFrames, render } from "react-server-frame/vite/frames";
 import { createRouter } from "remix/fetch-router";
 import { createMemoryFileStorage } from "remix/file-storage/memory";
+import { useCacheMiddleware } from "vite-plugin-react-use-cache/remix";
 
 import { routes } from "./routes.ts";
-import { useCacheMiddleware } from "./use-cache-middleware.ts";
 
 const About = lazy(() => import("./frames/about.tsx"));
 const Home = lazy(() => import("./frames/home.tsx"));
