@@ -16,7 +16,7 @@ export default function Home() {
       <p>
         Go <a href={routes.frames.about.href()}>About</a>
       </p>
-      <p>{new Date().toISOString()}</p>
+      <p>home {new Date().toISOString()}</p>
       {auth.ok ? (
         <>
           <h2>Welcome {auth.identity.userId}</h2>

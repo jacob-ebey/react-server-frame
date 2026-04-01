@@ -37,14 +37,14 @@ catalogs:
       specifier: ^1.0.0
       version: 1.0.0
     react:
-      specifier: ^19.2.4
-      version: 19.2.4
+      specifier: canary
+      version: 19.3.0-canary-044d56f3-20260330
     react-dom:
-      specifier: ^19.2.4
-      version: 19.2.4
+      specifier: canary
+      version: 19.3.0-canary-044d56f3-20260330
     react-server-dom-webpack:
-      specifier: ^19.2.4
-      version: 19.2.4
+      specifier: canary
+      version: 19.3.0-canary-044d56f3-20260330
     remix:
       specifier: 3.0.0-alpha.4
       version: 3.0.0-alpha.4
@@ -77,13 +77,13 @@ importers:
     dependencies:
       react:
         specifier: 'catalog:'
-        version: 19.2.4
+        version: 19.3.0-canary-044d56f3-20260330
       react-dom:
         specifier: 'catalog:'
-        version: 19.2.4(react@19.2.4)
+        version: 19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330)
       react-server-dom-webpack:
         specifier: 'catalog:'
-        version: 19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.105.4)
+        version: 19.3.0-canary-044d56f3-20260330(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react@19.3.0-canary-044d56f3-20260330)(webpack@5.105.4)
       react-server-frame:
         specifier: 'workspace:'
         version: link:../../packages/react-server-frame
@@ -117,7 +117,7 @@ importers:
         version: 6.0.1(@rolldown/plugin-babel@0.2.2(@babel/core@7.29.0)(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(rolldown@1.0.0-rc.12(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)))(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(babel-plugin-react-compiler@1.0.0)
       '@vitejs/plugin-rsc':
         specifier: 'catalog:'
-        version: 0.5.21(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react-dom@19.2.4(react@19.2.4))(react-server-dom-webpack@19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.105.4))(react@19.2.4)
+        version: 0.5.21(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react-server-dom-webpack@19.3.0-canary-044d56f3-20260330(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react@19.3.0-canary-044d56f3-20260330)(webpack@5.105.4))(react@19.3.0-canary-044d56f3-20260330)
       babel-plugin-react-compiler:
         specifier: 'catalog:'
         version: 1.0.0
@@ -132,7 +132,7 @@ importers:
         version: 1.0.0(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))
       vite-plugin-react-use-cache:
         specifier: 'catalog:'
-        version: 0.0.8(@vitejs/plugin-rsc@0.5.21(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react-dom@19.2.4(react@19.2.4))(react-server-dom-webpack@19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.105.4))(react@19.2.4))(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react@19.2.4)(remix@3.0.0-alpha.4)
+        version: 0.0.8(@vitejs/plugin-rsc@0.5.21(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react-server-dom-webpack@19.3.0-canary-044d56f3-20260330(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react@19.3.0-canary-044d56f3-20260330)(webpack@5.105.4))(react@19.3.0-canary-044d56f3-20260330))(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react@19.3.0-canary-044d56f3-20260330)(remix@3.0.0-alpha.4)
       vite-plus:
         specifier: 'catalog:'
         version: 0.1.15(@types/node@24.12.0)(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3)
@@ -166,19 +166,19 @@ importers:
         version: 6.0.1(@rolldown/plugin-babel@0.2.2(@babel/core@7.29.0)(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(rolldown@1.0.0-rc.12(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)))(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(babel-plugin-react-compiler@1.0.0)
       '@vitejs/plugin-rsc':
         specifier: ^0.5.21
-        version: 0.5.21(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react-dom@19.2.4(react@19.2.4))(react-server-dom-webpack@19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.105.4))(react@19.2.4)
+        version: 0.5.21(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react-server-dom-webpack@19.3.0-canary-044d56f3-20260330(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react@19.3.0-canary-044d56f3-20260330)(webpack@5.105.4))(react@19.3.0-canary-044d56f3-20260330)
       bumpp:
         specifier: ^11.0.1
         version: 11.0.1
       react:
         specifier: 'catalog:'
-        version: 19.2.4
+        version: 19.3.0-canary-044d56f3-20260330
       react-dom:
         specifier: 'catalog:'
-        version: 19.2.4(react@19.2.4)
+        version: 19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330)
       react-server-dom-webpack:
         specifier: 'catalog:'
-        version: 19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.105.4)
+        version: 19.3.0-canary-044d56f3-20260330(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react@19.3.0-canary-044d56f3-20260330)(webpack@5.105.4)
       remix:
         specifier: 'catalog:'
         version: 3.0.0-alpha.4
@@ -1528,21 +1528,21 @@ packages:
   quansync@1.0.0:
     resolution: {integrity: sha512-5xZacEEufv3HSTPQuchrvV6soaiACMFnq1H8wkVioctoH3TRha9Sz66lOxRwPK/qZj7HPiSveih9yAyh98gvqA==}
 
-  react-dom@19.2.4:
-    resolution: {integrity: sha512-AXJdLo8kgMbimY95O2aKQqsz2iWi9jMgKJhRBAxECE4IFxfcazB2LmzloIoibJI3C12IlY20+KFaLv+71bUJeQ==}
+  react-dom@19.3.0-canary-044d56f3-20260330:
+    resolution: {integrity: sha512-niIfJjR5aOT6ZadXDHkRwC0PyNJ4lbyrkHdMnH4h/J3IwTCODkxU7RaWICh84HlNnmOcgHknyVHXgqwcX06ljw==}
     peerDependencies:
-      react: ^19.2.4
+      react: 19.3.0-canary-044d56f3-20260330
 
-  react-server-dom-webpack@19.2.4:
-    resolution: {integrity: sha512-zEhkWv6RhXDctC2N7yEUHg3751nvFg81ydHj8LTTZuukF/IF1gcOKqqAL6Ds+kS5HtDVACYPik0IvzkgYXPhlQ==}
+  react-server-dom-webpack@19.3.0-canary-044d56f3-20260330:
+    resolution: {integrity: sha512-2FwG3SxCq+dfZIGPBY2OlxNWGL9fYFeRrSH/wHRHrArn4UCJ9ipAJKGgNay6y4qfBIxVuGRR/XP2NMZnB0JJKQ==}
     engines: {node: '>=0.10.0'}
     peerDependencies:
-      react: ^19.2.4
-      react-dom: ^19.2.4
+      react: 19.3.0-canary-044d56f3-20260330
+      react-dom: 19.3.0-canary-044d56f3-20260330
       webpack: ^5.59.0
 
-  react@19.2.4:
-    resolution: {integrity: sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==}
+  react@19.3.0-canary-044d56f3-20260330:
+    resolution: {integrity: sha512-yO6l+1MwN/nzRkDpeXjQtYGb7eusPZq+1dOdgQHb3rb5/qoeyc/wMPTd4I4PhWPXFR1T2GFU8dmkbDuoleWFnw==}
     engines: {node: '>=0.10.0'}
 
   remix@3.0.0-alpha.4:
@@ -1560,8 +1560,8 @@ packages:
   rsc-html-stream@0.0.7:
     resolution: {integrity: sha512-v9+fuY7usTgvXdNl8JmfXCvSsQbq2YMd60kOeeMIqCJFZ69fViuIxztHei7v5mlMMa2h3SqS+v44Gu9i9xANZA==}
 
-  scheduler@0.27.0:
-    resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
+  scheduler@0.28.0-canary-044d56f3-20260330:
+    resolution: {integrity: sha512-jodPHuET9t9GYk3TNNxc5mA7kRyVAQLOm7EoZMSBr4sWEp+WR965GSd8rvad9yXCPpew5ZPbGXApLQ2vi4cr7w==}
 
   schema-utils@4.3.3:
     resolution: {integrity: sha512-eflK8wEtyOE6+hsaRVPxvUKYCpRgzLqDTb8krvAsRIwOGlHoSgYLgBXoubGgLd2fT41/OUYdb48v4k4WWHQurA==}
@@ -2464,22 +2464,22 @@ snapshots:
       '@rolldown/plugin-babel': 0.2.2(@babel/core@7.29.0)(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(rolldown@1.0.0-rc.12(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1))
       babel-plugin-react-compiler: 1.0.0
 
-  '@vitejs/plugin-rsc@0.5.21(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react-dom@19.2.4(react@19.2.4))(react-server-dom-webpack@19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.105.4))(react@19.2.4)':
+  '@vitejs/plugin-rsc@0.5.21(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react-server-dom-webpack@19.3.0-canary-044d56f3-20260330(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react@19.3.0-canary-044d56f3-20260330)(webpack@5.105.4))(react@19.3.0-canary-044d56f3-20260330)':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-rc.5
       es-module-lexer: 2.0.0
       estree-walker: 3.0.3
       magic-string: 0.30.21
       periscopic: 4.0.2
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
+      react: 19.3.0-canary-044d56f3-20260330
+      react-dom: 19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330)
       srvx: 0.11.13
       strip-literal: 3.1.0
       turbo-stream: 3.2.0
       vite: '@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3)'
       vitefu: 1.1.3(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))
     optionalDependencies:
-      react-server-dom-webpack: 19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.105.4)
+      react-server-dom-webpack: 19.3.0-canary-044d56f3-20260330(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react@19.3.0-canary-044d56f3-20260330)(webpack@5.105.4)
 
   '@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3)':
     dependencies:
@@ -3019,21 +3019,21 @@ snapshots:
 
   quansync@1.0.0: {}
 
-  react-dom@19.2.4(react@19.2.4):
+  react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330):
     dependencies:
-      react: 19.2.4
-      scheduler: 0.27.0
+      react: 19.3.0-canary-044d56f3-20260330
+      scheduler: 0.28.0-canary-044d56f3-20260330
 
-  react-server-dom-webpack@19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.105.4):
+  react-server-dom-webpack@19.3.0-canary-044d56f3-20260330(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react@19.3.0-canary-044d56f3-20260330)(webpack@5.105.4):
     dependencies:
       acorn-loose: 8.5.2
       neo-async: 2.6.2
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
+      react: 19.3.0-canary-044d56f3-20260330
+      react-dom: 19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330)
       webpack: 5.105.4
       webpack-sources: 3.3.4
 
-  react@19.2.4: {}
+  react@19.3.0-canary-044d56f3-20260330: {}
 
   remix@3.0.0-alpha.4:
     dependencies:
@@ -3108,7 +3108,7 @@ snapshots:
 
   rsc-html-stream@0.0.7: {}
 
-  scheduler@0.27.0: {}
+  scheduler@0.28.0-canary-044d56f3-20260330: {}
 
   schema-utils@4.3.3:
     dependencies:
@@ -3223,13 +3223,13 @@ snapshots:
       uuid: 11.1.0
       vite: '@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3)'
 
-  vite-plugin-react-use-cache@0.0.8(@vitejs/plugin-rsc@0.5.21(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react-dom@19.2.4(react@19.2.4))(react-server-dom-webpack@19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.105.4))(react@19.2.4))(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react@19.2.4)(remix@3.0.0-alpha.4):
+  vite-plugin-react-use-cache@0.0.8(@vitejs/plugin-rsc@0.5.21(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react-server-dom-webpack@19.3.0-canary-044d56f3-20260330(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react@19.3.0-canary-044d56f3-20260330)(webpack@5.105.4))(react@19.3.0-canary-044d56f3-20260330))(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react@19.3.0-canary-044d56f3-20260330)(remix@3.0.0-alpha.4):
     dependencies:
       '@babel/core': 7.28.4
       '@babel/helper-module-imports': 7.27.1
       '@types/react': 19.1.13
-      '@vitejs/plugin-rsc': 0.5.21(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react-dom@19.2.4(react@19.2.4))(react-server-dom-webpack@19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.105.4))(react@19.2.4)
-      react: 19.2.4
+      '@vitejs/plugin-rsc': 0.5.21(@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3))(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react-server-dom-webpack@19.3.0-canary-044d56f3-20260330(react-dom@19.3.0-canary-044d56f3-20260330(react@19.3.0-canary-044d56f3-20260330))(react@19.3.0-canary-044d56f3-20260330)(webpack@5.105.4))(react@19.3.0-canary-044d56f3-20260330)
+      react: 19.3.0-canary-044d56f3-20260330
       remix: 3.0.0-alpha.4
       server-only: 0.0.1
       vite: '@voidzero-dev/vite-plus-core@0.1.15(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(yaml@2.8.3)'

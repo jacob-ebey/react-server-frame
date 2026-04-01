@@ -10,6 +10,10 @@ export function Login() {
   const [state, action, pending] = useActionState(loginAction, undefined);
   const errorId = useId();
 
+  if (state?.success) {
+    return <h2>{state.message || "Redirecting..."}~~~</h2>;
+  }
+
   return (
     <form
       className={loginStyles.login}

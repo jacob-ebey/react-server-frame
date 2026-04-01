@@ -13,9 +13,9 @@ catalog:
   "@vitejs/plugin-react": ^6.0.1
   "@vitejs/plugin-rsc": ~0.5.21
   "babel-plugin-react-compiler": ^1.0.0
-  react: ^19.2.4
-  react-dom: ^19.2.4
-  react-server-dom-webpack: ^19.2.4
+  react: canary
+  react-dom: canary
+  react-server-dom-webpack: canary
   remix: 3.0.0-alpha.4
   typescript: ^6.0.2
   vite: npm:@voidzero-dev/vite-plus-core@latest
@@ -30,6 +30,9 @@ overrides:
   vitest: "catalog:"
 peerDependencyRules:
   allowAny:
+    - react
+    - react-dom
+    - react-server-dom-webpack
     - vite
     - vitest
   allowedVersions:
