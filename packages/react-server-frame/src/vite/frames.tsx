@@ -3,6 +3,13 @@ import { createTemporaryReferenceSet, renderToReadableStream } from "@vitejs/plu
 import { ProvideFrames as _ProvideFrames, render as _render } from "../frames.tsx";
 
 import { fetchFrame } from "./fetch-frame.ts";
+import type { Middleware } from "remix/fetch-router";
+
+export function useServerMiddleware(): Middleware {
+  return ({ request }, next) => {
+    return next();
+  };
+}
 
 export async function render(request: Request, root: React.ReactNode) {
   const ssr = await import.meta.viteRsc.import<typeof import("./entry.ssr.tsx")>(
@@ -12,7 +19,13 @@ export async function render(request: Request, root: React.ReactNode) {
     },
   );
 
-  return _render(createTemporaryReferenceSet, renderToReadableStream, ssr.prerender, request, root);
+  return _render({
+    createTemporaryReferenceSet,
+    prerender: ssr.prerender,
+    renderToReadableStream,
+    request,
+    root,
+  });
 }
 
 export function ProvideFrames(

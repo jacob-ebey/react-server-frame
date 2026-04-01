@@ -1,4 +1,5 @@
 import { Document } from "../components/document.tsx";
+import { Login } from "../components/login.tsx";
 import { routes } from "../routes.ts";
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
       <p>
         Go <a href={routes.frames.about.href()}>About</a>
       </p>
+      <Login />
     </Document>
   );
 }

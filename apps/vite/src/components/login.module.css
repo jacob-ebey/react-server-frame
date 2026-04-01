@@ -1,0 +1,20 @@
+.login {
+  & label {
+    display: block;
+
+    & span {
+      display: block;
+    }
+
+    & input {
+      padding: 8px 16px;
+    }
+
+    & button {
+      background: none;
+      border: 2px solid black;
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+  }
+}

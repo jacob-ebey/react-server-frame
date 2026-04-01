@@ -3,23 +3,36 @@ import type { Route } from "remix/fetch-router/routes";
 
 import { ClientFrame, FetchFrameProvider } from "./frames.client.tsx";
 import type { Payload } from "./generic-payload.ts";
+import type { ReactFormState } from "react-dom/client";
 
-export async function render(
-  createTemporaryReferenceSet: () => unknown,
+export async function render({
+  createTemporaryReferenceSet,
+  formState,
+  prerender,
+  renderToReadableStream,
+  request,
+  returnValue,
+  root,
+}: {
+  createTemporaryReferenceSet: () => unknown;
+  formState?: ReactFormState;
+  prerender: (body: ReadableStream<Uint8Array>) => Promise<Response>;
   renderToReadableStream: (
     payload: any,
     options: {
       temporaryReferences: unknown;
       onError: (error: unknown) => string | undefined;
     },
-  ) => ReadableStream<Uint8Array>,
-  prerender: (body: ReadableStream<Uint8Array>) => Promise<Response>,
-  request: Request,
-  root: React.ReactNode,
-) {
+  ) => ReadableStream<Uint8Array>;
+  request: Request;
+  returnValue?: Promise<unknown>;
+  root: React.ReactNode;
+}) {
   try {
     const payload: Payload = {
       root,
+      returnValue,
+      formState,
     };
 
     const temporaryReferences = createTemporaryReferenceSet();
@@ -38,7 +51,7 @@ export async function render(
     });
 
     const url = new URL(request.url);
-    if (url.searchParams.has("_rsc")) {
+    if (url.pathname.endsWith(".rsc")) {
       return new Response(body, {
         headers: {
           "Content-Type": "text/x-component; charset=utf-8",
@@ -64,7 +77,6 @@ const frameCache = cache(
   (): {
     frames?: Record<string, Route>;
     components?: Record<string, React.ComponentType>;
-    url?: string;
   } => ({}),
 );
 
@@ -86,7 +98,6 @@ export type ProvideFramesProps<Frames extends Routes> = {
   components: Components<Frames>;
   fetchFrame: (url: URL, signal: AbortSignal) => Promise<React.ReactNode>;
   frames: Frames;
-  url: string;
 };
 
 export function ProvideFrames<Frames extends Routes>({
@@ -94,28 +105,29 @@ export function ProvideFrames<Frames extends Routes>({
   components,
   fetchFrame,
   frames,
-  url,
 }: ProvideFramesProps<Frames>) {
   const cache = frameCache();
 
   cache.components = { ...cache.components, ...components };
   cache.frames = { ...cache.frames, ...frames };
-  cache.url = url;
 
   return <FetchFrameProvider fetchFrame={fetchFrame}>{children}</FetchFrameProvider>;
 }
 
 export function Frame({ src }: { src: string }) {
   const cache = frameCache();
-  if (!cache.components || !cache.frames || !cache.url) throw new Error("No frames provided");
+  if (!cache.components || !cache.frames) throw new Error("No frames provided");
 
-  const url = new URL(src, cache.url);
+  const url = new URL(src, "http://react-server-frame/");
+  if (url.pathname.endsWith(".rsc")) {
+    url.pathname = url.pathname.slice(0, -4);
+  }
 
   const Component = match(cache.frames, cache.components, url.href);
   if (!Component) throw new NotFoundError("No matching frame found");
 
   return (
-    <ClientFrame src={src}>
+    <ClientFrame src={url.pathname + url.search}>
       <Component />
     </ClientFrame>
   );

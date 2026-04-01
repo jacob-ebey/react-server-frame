@@ -1,4 +1,10 @@
-import { createFromFetch, createFromReadableStream } from "@vitejs/plugin-rsc/browser";
+import {
+  createFromFetch,
+  createFromReadableStream,
+  createTemporaryReferenceSet,
+  encodeReply,
+  setServerCallback,
+} from "@vitejs/plugin-rsc/browser";
 import { startTransition, StrictMode, use, useState } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { rscStream } from "rsc-html-stream/client";
@@ -31,7 +37,7 @@ function Content({ payload }: { payload: Promise<Payload> }) {
 let navigationController = new AbortController();
 function navigate(to: string) {
   const url = new URL(to);
-  url.searchParams.set("_rsc", "1");
+  url.pathname += ".rsc";
 
   let thisController = new AbortController();
   startTransition(() =>
@@ -40,6 +46,26 @@ function navigate(to: string) {
   navigationController.abort();
   navigationController = thisController;
 }
+
+setServerCallback(async (id, args) => {
+  const url = new URL(window.location.href);
+  url.pathname += ".rsc";
+  const temporaryReferences = createTemporaryReferenceSet();
+  const payload = await createFromFetch<Payload>(
+    fetch(url, {
+      method: "POST",
+      body: await encodeReply(args, { temporaryReferences }),
+      headers: {
+        "x-rsc-action": id,
+      },
+    }),
+    { temporaryReferences },
+  );
+  startTransition(() => {
+    setPayload(Promise.resolve(payload));
+  });
+  return payload.returnValue;
+});
 
 window.navigation?.addEventListener("navigate", (event) => {
   if (!event.canIntercept) {

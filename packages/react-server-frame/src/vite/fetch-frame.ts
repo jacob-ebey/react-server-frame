@@ -8,7 +8,7 @@ if (typeof document !== "undefined") {
 
 export async function fetchFrame(url: URL, signal: AbortSignal) {
   const { createFromFetch } = await import("@vitejs/plugin-rsc/browser");
-  url.searchParams.set("_rsc", "1");
+  url.pathname += ".rsc";
   const payload = await createFromFetch<Payload>(fetch(url, { signal }));
   return payload.root;
 }
