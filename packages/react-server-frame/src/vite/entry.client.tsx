@@ -32,7 +32,9 @@ setServerCallback(async (id, args) => {
   }
   if (payload.type === "redirect") {
     if (window.navigation) {
-      navigate(payload.redirect);
+      window.navigation.navigate(payload.redirect, {
+        history: "replace",
+      });
     } else {
       window.location.href = payload.redirect;
     }
@@ -58,7 +60,7 @@ createFromReadableStream<Payload>(rscStream).then(
 
 let setPayload: (payload: Promise<Payload>) => void;
 
-let seenPayloads = new WeakSet<Payload>();
+let seenPayloads = new WeakMap<Payload, Promise<void>>();
 
 function Content({ initialPayload }: { initialPayload: Promise<Payload> }) {
   const [promise, _setPayload] = useState(initialPayload);
@@ -68,9 +70,15 @@ function Content({ initialPayload }: { initialPayload: Promise<Payload> }) {
 
   if (payload.type === "redirect") {
     if (window.navigation) {
-      if (!seenPayloads) {
-        navigate(payload.redirect);
+      if (!seenPayloads.has(payload)) {
+        const promise = Promise.resolve(
+          window.navigation.navigate(payload.redirect, {
+            history: "replace",
+          }).finished,
+        ).then(() => {});
+        seenPayloads.set(payload, Promise.resolve(promise));
       }
+      use(seenPayloads.get(payload)!);
       return null;
     } else {
       window.location.href = payload.redirect;
@@ -82,21 +90,31 @@ function Content({ initialPayload }: { initialPayload: Promise<Payload> }) {
 }
 
 let navigationController = new AbortController();
-function navigate(to: string) {
+async function navigate(to: string) {
   const url = new URL(to, window.location.href);
   url.pathname += ".rsc";
 
-  if (window.location.host !== url.host) {
-    window.location.href = url.href;
-    return;
-  }
+  const thisController = new AbortController();
+  const responses = fetch(url, { signal: thisController.signal }).then((response) => [
+    response,
+    response.clone(),
+  ]);
 
-  let thisController = new AbortController();
-  startTransition(() =>
-    setPayload(createFromFetch<Payload>(fetch(url, { signal: thisController.signal }))),
-  );
+  startTransition(() => setPayload(createFromFetch<Payload>(responses.then(([r]) => r))));
   navigationController.abort();
   navigationController = thisController;
+
+  const [, response] = await responses;
+  if (!response.body) return;
+  const reader = response.body.getReader();
+  try {
+    let chunk = await reader.read();
+    while (!chunk.done) {
+      chunk = await reader.read();
+    }
+  } finally {
+    reader.releaseLock();
+  }
 }
 
 window.navigation?.addEventListener("navigate", (event) => {
@@ -108,9 +126,16 @@ window.navigation?.addEventListener("navigate", (event) => {
     return;
   }
 
+  const url = new URL(event.destination.url);
+
+  if (window.location.origin !== url.origin) {
+    window.location.href = url.href;
+    return;
+  }
+
   event.intercept({
     async handler() {
-      navigate(event.destination.url);
+      await navigate(event.destination.url);
     },
   });
 });
@@ -118,6 +143,6 @@ window.navigation?.addEventListener("navigate", (event) => {
 if (import.meta.hot) {
   import.meta.hot.on("rsc:update", (e) => {
     console.log("[vite-rsc:update]", e.file);
-    navigate(location.href);
+    void navigate(location.href);
   });
 }
