@@ -4,7 +4,7 @@ import { routes } from "../routes.ts";
 
 export default function About() {
   return (
-    <Document title="Hello, About!">
+    <Document>
       <h1>Hello, About!</h1>
       <p>
         Go <a href={routes.frames.home.href()}>Home</a>

@@ -4,7 +4,7 @@
 
 body {
   width: 100%;
-  max-width: 800px;
+  max-width: 60em;
   margin: 0 auto;
   padding: 0 1rem;
   font-family: monospace;
@@ -12,5 +12,15 @@ body {
   @media (min-width: 600px) {
     display: grid;
     grid-template-columns: 1fr auto;
+
+    & > div:first-child {
+      padding-right: 1rem;
+    }
+
+    & > aside {
+      border-left: 2px solid black;
+      padding: 0 1rem;
+      min-height: 100vh;
+    }
   }
 }

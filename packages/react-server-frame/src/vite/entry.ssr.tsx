@@ -11,7 +11,20 @@ export async function prerender(body: ReadableStream<Uint8Array>) {
   let decode: Promise<Payload> | undefined;
   function Content() {
     decode ??= createFromReadableStream<Payload>(decodeBody);
-    return use(decode).root;
+    const payload = use(decode);
+
+    if (payload.type === "redirect") {
+      return (
+        <html>
+          <head></head>
+          <body>
+            <meta http-equiv="refresh" content={`0; url=${payload.redirect}`} />
+          </body>
+        </html>
+      );
+    }
+
+    return <>{payload.root}</>;
   }
 
   let notFoundError = false;
@@ -33,7 +46,9 @@ export async function prerender(body: ReadableStream<Uint8Array>) {
       },
     });
 
+    const payload = await decode;
     return new Response(html.pipeThrough(injectRSCPayload(inlineBody)), {
+      status: payload!.type === "redirect" ? 302 : notFoundError ? 404 : 200,
       headers: {
         "Content-Type": "text/html; charset=utf-8",
       },

@@ -33,7 +33,7 @@ const router = createRouter({
   middleware: [asyncContext()],
 });
 
-router.get("*", {
+router.route("ANY", "*", {
   middleware: [
     session(sessionCookie, sessionStorage),
     auth({
@@ -42,9 +42,8 @@ router.get("*", {
           read(session) {
             return session.get("auth") as { userId: string } | null;
           },
-          verify(_) {
-            // TODO: validate the user id
-            return true;
+          verify(value) {
+            return value;
           },
           invalidate(session) {
             session.unset("auth");

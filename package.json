@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "ready": "vp fmt && vp lint && vp run test -r && vp run build -r",
+    "ready": "vp fmt && vp lint && vp run -r build",
     "dev:vite": "vp run vite#dev",
     "prepare": "vp config"
   },

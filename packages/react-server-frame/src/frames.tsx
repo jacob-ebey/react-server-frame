@@ -1,21 +1,50 @@
 import { cache } from "react";
+import type { ReactFormState } from "react-dom/client";
+import { getContext } from "remix/async-context-middleware";
 import type { Route } from "remix/fetch-router/routes";
 
 import { ClientFrame, FetchFrameProvider } from "./frames.client.tsx";
 import type { Payload } from "./generic-payload.ts";
-import type { ReactFormState } from "react-dom/client";
+
+export class UseServerState {
+  formState?: ReactFormState;
+  returnValue?: Promise<unknown>;
+  temporaryReferences?: unknown;
+  status?: number;
+
+  constructor(
+    formState: ReactFormState | undefined,
+    returnValue: Promise<unknown> | undefined,
+    temporaryReferences: unknown,
+    status: number | undefined,
+  ) {
+    this.formState = formState;
+    this.returnValue = returnValue;
+    this.temporaryReferences = temporaryReferences;
+    this.status = status;
+  }
+}
+
+export class RedirectState {
+  location: string;
+  constructor(location: string) {
+    this.location = location;
+  }
+}
+
+export function redirect(location: string) {
+  const ctx = getContext();
+  ctx.set(RedirectState, new RedirectState(location));
+}
 
 export async function render({
   createTemporaryReferenceSet,
-  formState,
   prerender,
   renderToReadableStream,
   request,
-  returnValue,
   root,
 }: {
   createTemporaryReferenceSet: () => unknown;
-  formState?: ReactFormState;
   prerender: (body: ReadableStream<Uint8Array>) => Promise<Response>;
   renderToReadableStream: (
     payload: any,
@@ -25,17 +54,33 @@ export async function render({
     },
   ) => ReadableStream<Uint8Array>;
   request: Request;
-  returnValue?: Promise<unknown>;
   root: React.ReactNode;
 }) {
+  const ctx = getContext();
+  let redirect: RedirectState | undefined;
   try {
-    const payload: Payload = {
-      root,
-      returnValue,
-      formState,
-    };
+    redirect = ctx.get(RedirectState);
+  } catch {}
+  let state: UseServerState | undefined;
+  try {
+    state = ctx.get(UseServerState);
+  } catch {}
 
-    const temporaryReferences = createTemporaryReferenceSet();
+  try {
+    const payload: Payload = redirect
+      ? {
+          type: "redirect",
+          redirect: redirect.location,
+          returnValue: state?.returnValue,
+        }
+      : {
+          type: "render",
+          root,
+          returnValue: state?.returnValue,
+          formState: state?.formState,
+        };
+
+    const temporaryReferences = state?.temporaryReferences ?? createTemporaryReferenceSet();
 
     const body = renderToReadableStream(payload, {
       temporaryReferences,

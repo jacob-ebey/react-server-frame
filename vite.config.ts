@@ -1,9 +1,14 @@
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
-  fmt: {},
+  fmt: {
+    ignorePatterns: ["dist/**"],
+  },
   staged: {
     "*": "vp check --fix",
   },
-  lint: { options: { typeAware: true, typeCheck: true } },
+  lint: {
+    ignorePatterns: ["dist/**"],
+    options: { typeAware: true, typeCheck: true },
+  },
 });

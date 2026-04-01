@@ -1,6 +1,7 @@
-.counter {
+.button {
   background: none;
   border: 2px solid black;
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   cursor: pointer;
+  display: inline-block;
 }

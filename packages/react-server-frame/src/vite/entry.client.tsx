@@ -11,42 +11,6 @@ import { rscStream } from "rsc-html-stream/client";
 
 import type { Payload } from "../generic-payload.ts";
 
-createFromReadableStream<Payload>(rscStream).then(
-  (payload) =>
-    hydrateRoot(
-      document.body,
-      <StrictMode>
-        <Content payload={Promise.resolve(payload)} />
-      </StrictMode>,
-      {
-        formState: payload.formState,
-      },
-    ),
-  (reason) => console.error("Failed to hydrate root", reason),
-);
-
-let setPayload: (payload: Promise<Payload>) => void;
-
-function Content({ payload }: { payload: Promise<Payload> }) {
-  const [promise, _setPayload] = useState(payload);
-  setPayload = _setPayload;
-
-  return use(promise).root;
-}
-
-let navigationController = new AbortController();
-function navigate(to: string) {
-  const url = new URL(to);
-  url.pathname += ".rsc";
-
-  let thisController = new AbortController();
-  startTransition(() =>
-    setPayload(createFromFetch<Payload>(fetch(url, { signal: thisController.signal }))),
-  );
-  navigationController.abort();
-  navigationController = thisController;
-}
-
 setServerCallback(async (id, args) => {
   const url = new URL(window.location.href);
   url.pathname += ".rsc";
@@ -61,11 +25,79 @@ setServerCallback(async (id, args) => {
     }),
     { temporaryReferences },
   );
-  startTransition(() => {
-    setPayload(Promise.resolve(payload));
-  });
+  if (payload.type === "render") {
+    startTransition(() => {
+      setPayload(Promise.resolve(payload));
+    });
+  }
+  if (payload.type === "redirect") {
+    if (window.navigation) {
+      navigate(payload.redirect);
+    } else {
+      window.location.href = payload.redirect;
+    }
+  }
   return payload.returnValue;
 });
+
+createFromReadableStream<Payload>(rscStream).then(
+  (payload) =>
+    startTransition(() => {
+      hydrateRoot(
+        document,
+        <StrictMode>
+          <Content initialPayload={Promise.resolve(payload)} />
+        </StrictMode>,
+        {
+          formState: payload.formState,
+        },
+      );
+    }),
+  (reason) => console.error("Failed to hydrate root", reason),
+);
+
+let setPayload: (payload: Promise<Payload>) => void;
+
+let seenPayloads = new WeakSet<Payload>();
+
+function Content({ initialPayload }: { initialPayload: Promise<Payload> }) {
+  const [promise, _setPayload] = useState(initialPayload);
+  setPayload = _setPayload;
+
+  const payload = use(promise);
+
+  if (payload.type === "redirect") {
+    if (window.navigation) {
+      if (!seenPayloads) {
+        navigate(payload.redirect);
+      }
+      return null;
+    } else {
+      window.location.href = payload.redirect;
+      return null;
+    }
+  }
+
+  return payload.root;
+}
+
+let navigationController = new AbortController();
+function navigate(to: string) {
+  const url = new URL(to, window.location.href);
+  url.pathname += ".rsc";
+
+  if (window.location.host !== url.host) {
+    window.location.href = url.href;
+    return;
+  }
+
+  let thisController = new AbortController();
+  startTransition(() =>
+    setPayload(createFromFetch<Payload>(fetch(url, { signal: thisController.signal }))),
+  );
+  navigationController.abort();
+  navigationController = thisController;
+}
 
 window.navigation?.addEventListener("navigate", (event) => {
   if (!event.canIntercept) {

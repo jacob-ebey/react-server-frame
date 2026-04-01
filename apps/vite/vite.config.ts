@@ -16,4 +16,11 @@ export default defineConfig({
     useCachePlugin(),
     devtoolsJson(),
   ],
+  lint: {
+    options: {
+      typeAware: true,
+      typeCheck: true,
+    },
+  },
+  fmt: {},
 });

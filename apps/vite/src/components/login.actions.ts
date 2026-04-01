@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "react-server-frame";
 import { getContext } from "remix/async-context-middleware";
 import { Session } from "remix/session";
 
@@ -12,6 +13,8 @@ export async function loginAction(_: unknown, formData: FormData) {
   const ctx = getContext();
   const session = ctx.get(Session);
   session.set("auth", { userId });
+
+  redirect("/");
 
   return { success: true, message: `Welcome ${userId}` };
 }

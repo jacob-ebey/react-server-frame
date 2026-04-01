@@ -63,11 +63,9 @@ export function ClientFrame({ children, src }: { children?: React.ReactNode; src
     if (!fetchFrame) throw new Error("FetchFrameContext is not provided");
 
     const thisController = new AbortController();
-    startTransition(async () => {
-      startTransition(() =>
-        setContent(fetchFrame(new URL(src, window.location.href), thisController.signal)),
-      );
-    });
+    startTransition(() =>
+      setContent(fetchFrame(new URL(src, window.location.href), thisController.signal)),
+    );
     controllerRef.current?.abort();
     controllerRef.current = thisController;
   }, [fetchFrame, src]);

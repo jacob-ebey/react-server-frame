@@ -3,7 +3,8 @@
 import { startTransition, useActionState, useId } from "react";
 import { loginAction } from "./login.actions.ts";
 
-import styles from "./login.module.css";
+import buttonStyles from "./button.module.css";
+import loginStyles from "./login.module.css";
 
 export function Login() {
   const [state, action, pending] = useActionState(loginAction, undefined);
@@ -11,7 +12,7 @@ export function Login() {
 
   return (
     <form
-      className={styles.login}
+      className={loginStyles.login}
       action={action}
       onSubmit={(event) => {
         if (pending) {
@@ -19,16 +20,22 @@ export function Login() {
           return;
         }
         const formData = new FormData(event.currentTarget);
-        startTransition(() => action(formData));
         event.preventDefault();
+        startTransition(() => action(formData));
       }}
     >
       <label>
         <span>User ID</span>
         <input type="text" name="userId" aria-labelledby={errorId} />
-        {state?.error ? <span id={errorId}>{state.error}</span> : null}
+        {state?.error ? (
+          <span data-error id={errorId}>
+            {state.error}
+          </span>
+        ) : null}
       </label>
-      <button aria-disabled={pending}>{pending ? "Logging in..." : "Login"}</button>
+      <div>
+        <button className={buttonStyles.button}>{pending ? "Logging in..." : "Login"}</button>
+      </div>
     </form>
   );
 }

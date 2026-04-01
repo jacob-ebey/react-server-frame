@@ -1,20 +1,21 @@
 .login {
+  display: grid;
+  gap: 0.5rem;
+
   & label {
-    display: block;
+    display: grid;
+    gap: 0.25rem;
 
     & span {
       display: block;
     }
 
-    & input {
-      padding: 8px 16px;
+    & [data-error] {
+      color: red;
     }
 
-    & button {
-      background: none;
-      border: 2px solid black;
+    & input {
       padding: 8px 16px;
-      cursor: pointer;
     }
   }
 }
