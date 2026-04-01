@@ -25,23 +25,24 @@ export const routes = route({
 ```tsx
 const router = createRouter();
 
-router.get("*", ({ request }) => {
-  return render(
-    request,
-    <ProvideFrames
-      url={request.url}
-      frames={routes.frames}
-      components={{
-        about: About,
-        home: Home,
-        partials: {
-          sidebar: Sidebar,
-        },
-      }}
-    >
-      <Frame src={request.url} />
-    </ProvideFrames>,
-  );
+router.route("ANY", "*", {
+  handler: ({ request }) => {
+    return render(
+      request,
+      <ProvideFrames
+        frames={routes.frames}
+        components={{
+          about: About,
+          home: Home,
+          partials: {
+            sidebar: Sidebar,
+          },
+        }}
+      >
+        <Frame src={request.url} />
+      </ProvideFrames>,
+    );
+  },
 });
 ```
 
