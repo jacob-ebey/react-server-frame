@@ -6,6 +6,7 @@ catalog:
   "@babel/core": ^7.29.0
   "@rolldown/plugin-babel": ~0.2.2
   "@types/babel__core": ^7.20.5
+  "@types/dom-navigation": ^1.0.7
   "@types/node": ^24
   "@types/react": ^19.2.14
   "@types/react-dom": ^19.2.3
@@ -13,12 +14,15 @@ catalog:
   "@vitejs/plugin-react": ^6.0.1
   "@vitejs/plugin-rsc": ~0.5.21
   "babel-plugin-react-compiler": ^1.0.0
+  bumpp: ^11.0.1
+  nitro: 3.0.260311-beta
   oxfmt: ^0.43.0
   oxlint: ^1.58.0
   react: canary
   react-dom: canary
   react-server-dom-webpack: canary
   remix: 3.0.0-alpha.4
+  rsc-html-stream: 0.0.7
   typescript: ^6.0.2
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vite-plugin-devtools-json: ^1.0.0
