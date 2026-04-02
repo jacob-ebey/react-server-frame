@@ -1,6 +1,6 @@
 {
   "name": "react-server-frame",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A new type of RSC routing.",
   "homepage": "https://github.com/jacob-ebey/react-server-frame#readme",
   "bugs": {
@@ -47,7 +47,6 @@
     "@typescript/native-preview": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "@vitejs/plugin-rsc": "catalog:",
-    "bumpp": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-server-dom-webpack": "catalog:",
