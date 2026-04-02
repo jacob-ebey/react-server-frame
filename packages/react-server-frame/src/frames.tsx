@@ -45,6 +45,7 @@ export function mapFrames<Frames extends Routes>(
       };
 
       const action = {
+        action: handler,
         handler,
         middleware,
       };
