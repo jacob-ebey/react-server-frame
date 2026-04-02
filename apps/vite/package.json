@@ -26,7 +26,6 @@
     "@vitejs/plugin-react": "catalog:",
     "@vitejs/plugin-rsc": "catalog:",
     "babel-plugin-react-compiler": "catalog:",
-    "nitro": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-devtools-json": "catalog:",

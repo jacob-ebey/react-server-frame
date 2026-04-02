@@ -25,23 +25,14 @@ export const routes = route({
 ```tsx
 const router = createRouter();
 
-router.route("ANY", "*", {
-  handler: ({ request }) => {
-    return render(
-      request,
-      <ProvideFrames
-        frames={routes.frames}
-        components={{
-          about: About,
-          home: Home,
-          partials: {
-            sidebar: Sidebar,
-          },
-        }}
-      >
-        <Frame src={request.url} />
-      </ProvideFrames>,
-    );
+mapFrames(router, routes.frames, {
+  middleware: [useCacheMiddleware(createMemoryFileStorage()), useServerMiddleware()],
+  components: {
+    about: About,
+    home: Home,
+    partials: {
+      sidebar: Sidebar,
+    },
   },
 });
 ```
