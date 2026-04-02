@@ -7,7 +7,7 @@ function getEntry(file: string) {
   return Vite.normalizePath(path.join(path.dirname(fileURLToPath(import.meta.url)), file));
 }
 
-export function framework({ entry = "/src/entry.server" }: { entry?: string } = {}) {
+export function reactServerFrame({ entry = "/src/entry.server" }: { entry?: string } = {}) {
   return {
     name: "framework",
     config(userConfig) {

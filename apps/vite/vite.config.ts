@@ -5,11 +5,11 @@ import devtoolsJson from "vite-plugin-devtools-json";
 import { useCachePlugin } from "vite-plugin-react-use-cache";
 import { defineConfig } from "vite-plus";
 
-import { framework } from "react-server-frame/vite/plugin";
+import { reactServerFrame } from "react-server-frame/vite/plugin";
 
 export default defineConfig({
   plugins: [
-    framework(),
+    reactServerFrame(),
     react(),
     rsc(),
     babel({ presets: [reactCompilerPreset()] }),
