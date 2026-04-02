@@ -1,5 +1,7 @@
 import { lazy } from "react";
 import { mapFrames, useServerMiddleware } from "react-server-frame/vite/frames";
+import { useCacheMiddleware } from "vite-plugin-react-use-cache/remix";
+
 import { asyncContext } from "remix/async-context-middleware";
 import { auth, createSessionAuthScheme } from "remix/auth-middleware";
 import { createCookie } from "remix/cookie";
@@ -7,7 +9,6 @@ import { createRouter } from "remix/fetch-router";
 import { createMemoryFileStorage } from "remix/file-storage/memory";
 import { createCookieSessionStorage } from "remix/session/cookie-storage";
 import { session } from "remix/session-middleware";
-import { useCacheMiddleware } from "vite-plugin-react-use-cache/remix";
 
 import { routes } from "./routes.ts";
 
