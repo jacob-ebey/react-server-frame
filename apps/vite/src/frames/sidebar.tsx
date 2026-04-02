@@ -13,8 +13,8 @@ export default function Sidebar() {
     <aside>
       <h2>sidebar{userId ? ` | ${userId}` : ""}</h2>
       <p>{new Date().toISOString()}</p>
-      <CachedSidebar userId={userId} />
       <ReloadSidebar />
+      <CachedSidebar userId={userId} />
     </aside>
   );
 }

@@ -36,6 +36,12 @@ catalogs:
     babel-plugin-react-compiler:
       specifier: ^1.0.0
       version: 1.0.0
+    oxfmt:
+      specifier: ^0.43.0
+      version: 0.43.0
+    oxlint:
+      specifier: ^1.58.0
+      version: 1.58.0
     react:
       specifier: canary
       version: 19.3.0-canary-044d56f3-20260330
@@ -69,6 +75,12 @@ importers:
 
   .:
     devDependencies:
+      oxfmt:
+        specifier: 'catalog:'
+        version: 0.43.0
+      oxlint:
+        specifier: 'catalog:'
+        version: 1.58.0(oxlint-tsgolint@0.18.1)
       vite-plus:
         specifier: 'catalog:'
         version: 0.1.15(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(typescript@6.0.2)(vite@8.0.3(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.3))(yaml@2.8.3)

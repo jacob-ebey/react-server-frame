@@ -1,11 +1,69 @@
 import { cache } from "react";
 import type { ReactFormState } from "react-dom/client";
 import { getContext } from "remix/async-context-middleware";
+import type { Middleware, RequestHandler, Router } from "remix/fetch-router";
 import type { Route } from "remix/fetch-router/routes";
 
 import { ClientFrame, FetchFrameProvider } from "./frames.client.tsx";
 import type { Payload } from "./generic-payload.ts";
-import type { Middleware } from "remix/fetch-router";
+import { RoutePattern } from "remix/route-pattern";
+
+export function mapFrames<Frames extends Routes>(
+  router: Router<any>,
+  frames: Frames,
+  { components, middleware }: { middleware?: Middleware[]; components: Components<Frames> },
+  config: {
+    createTemporaryReferenceSet: () => unknown;
+    fetchFrame: (url: URL, signal: AbortSignal) => Promise<React.ReactNode>;
+    prerender: (body: ReadableStream<Uint8Array>) => Promise<Response>;
+    renderToReadableStream: (
+      payload: any,
+      options?: {
+        temporaryReferences: unknown;
+        onError: (error: unknown) => string | undefined;
+      },
+    ) => ReadableStream<Uint8Array>;
+  },
+) {
+  for (let [key, frame] of Object.entries(frames)) {
+    if (typeof (frame as Route).pattern?.test === "function") {
+      const handler: RequestHandler = ({ request }) => {
+        const { createTemporaryReferenceSet, fetchFrame, prerender, renderToReadableStream } =
+          config;
+
+        return render({
+          createTemporaryReferenceSet,
+          prerender,
+          renderToReadableStream,
+          request,
+          root: (
+            <ProvideFrames fetchFrame={fetchFrame} frames={frames} components={components}>
+              <Frame src={request.url} />
+            </ProvideFrames>
+          ),
+        });
+      };
+
+      const action = {
+        handler,
+        middleware,
+      };
+
+      let route = frame.pattern as RoutePattern<string>;
+      router.route("GET", route.source, action);
+      router.route("GET", route.source + ".rsc", action);
+      router.route("POST", route.source, action);
+      router.route("POST", route.source + ".rsc", action);
+    } else {
+      mapFrames(
+        router,
+        frame as Routes,
+        { components: components[key] as Components<Routes>, middleware },
+        config,
+      );
+    }
+  }
+}
 
 export class UseServerState {
   formState?: ReactFormState;
@@ -192,8 +250,8 @@ export class NotFoundError extends Error {
 
 interface Routes extends Record<string, Route | Routes> {}
 
-type Components<R extends Record<any, any>> = {
-  [K in keyof R]: (R[K] extends Record<any, any> ? Components<R[K]> : never) | React.ComponentType;
+type Components<R extends Routes> = {
+  [K in keyof R]: R[K] extends Routes ? Components<R[K]> : React.ComponentType;
 };
 
 export type ProvideFramesProps<Frames extends Routes> = {
@@ -245,7 +303,7 @@ function match(
     if (typeof (route as Route).pattern?.test === "function") {
       if ((route as Route).pattern.test(href)) return components?.[id] as React.ComponentType;
     } else {
-      let matched = match(route as Routes, components?.[id] as Components<Routes>, href);
+      let matched = match(route as Routes, components?.[id] as unknown as Components<Routes>, href);
       if (matched) return matched;
     }
   }

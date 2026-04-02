@@ -1,6 +1,5 @@
 import { lazy } from "react";
-import { Frame } from "react-server-frame";
-import { ProvideFrames, render, useServerMiddleware } from "react-server-frame/vite/frames";
+import { mapFrames, useServerMiddleware } from "react-server-frame/vite/frames";
 import { asyncContext } from "remix/async-context-middleware";
 import { auth, createSessionAuthScheme } from "remix/auth-middleware";
 import { createCookie } from "remix/cookie";
@@ -51,24 +50,14 @@ const router = createRouter({
   ],
 });
 
-router.route("ANY", "*", {
+mapFrames(router, routes.frames, {
   middleware: [useCacheMiddleware(createMemoryFileStorage()), useServerMiddleware()],
-  handler: ({ request }) => {
-    return render(
-      request,
-      <ProvideFrames
-        frames={routes.frames}
-        components={{
-          about: About,
-          home: Home,
-          partials: {
-            sidebar: Sidebar,
-          },
-        }}
-      >
-        <Frame src={request.url} />
-      </ProvideFrames>,
-    );
+  components: {
+    about: About,
+    home: Home,
+    partials: {
+      sidebar: Sidebar,
+    },
   },
 });
 

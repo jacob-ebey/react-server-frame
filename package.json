@@ -7,6 +7,8 @@
     "prepare": "vp config"
   },
   "devDependencies": {
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
     "vite-plus": "catalog:"
   },
   "engines": {
