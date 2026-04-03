@@ -13,7 +13,7 @@ let databaseFilePath: string;
 if (process.env.NODE_ENV === "test") {
   databaseFilePath = ":memory:";
 } else {
-  let dbDirectoryUrl = path.dirname(process.cwd());
+  let dbDirectoryUrl = process.cwd();
   databaseFilePath = path.join(dbDirectoryUrl, "db.sqlite");
   fs.mkdirSync(dbDirectoryUrl, { recursive: true });
 }
