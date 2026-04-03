@@ -9,8 +9,16 @@ import { Session } from "remix/session";
 import type { AppContext } from "@/entry.server";
 import { routes } from "@/routes";
 import { atmosphereIdentifierSessionKey, createAuthProvider } from "@/lib/auth";
-import type { LoginResult } from "@/components/login-form";
-import type { LogoutResult } from "@/components/logout-form";
+
+export type LogoutResult =
+  | {
+      success: true;
+      message: string;
+    }
+  | {
+      success: false;
+      error: string;
+    };
 
 export async function logoutAction(): Promise<LogoutResult> {
   try {
@@ -35,6 +43,16 @@ export async function logoutAction(): Promise<LogoutResult> {
 const loginFormSchema = s.object({
   handleOrDid: s.string(),
 });
+
+export type LoginResult =
+  | {
+      success: true;
+      message: string;
+    }
+  | {
+      success: false;
+      error: string;
+    };
 
 export async function loginAction(_: unknown, formData: FormData): Promise<LoginResult> {
   const parsed = s.parseSafe(loginFormSchema, Object.fromEntries(formData));

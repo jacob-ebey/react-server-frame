@@ -3,28 +3,19 @@
 import { RowsIcon } from "@phosphor-icons/react";
 import { startTransition, useActionState, useId } from "react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-
-export type LoginResult =
-  | {
-      success: true;
-      message: string;
-    }
-  | {
-      success: false;
-      error: string;
-    };
+import type { loginAction } from "@/lib/auth.actions";
+import { cn } from "@/lib/utils";
 
 export function LoginForm({
   action,
   className,
   ...props
 }: React.ComponentProps<"div"> & {
-  action: (_: LoginResult | undefined, formData: FormData) => Promise<LoginResult>;
+  action: typeof loginAction;
 }) {
   const [state, formAction, pending] = useActionState(action, undefined);
 

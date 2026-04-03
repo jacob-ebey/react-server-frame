@@ -1,23 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { startTransition, useActionState } from "react";
 
-export type LogoutResult =
-  | {
-      success: true;
-      message: string;
-    }
-  | {
-      success: false;
-      error: string;
-    };
+import { Button } from "@/components/ui/button";
+import type { logoutAction } from "@/lib/auth.actions";
 
 export function LogoutForm({
   action,
   className,
 }: {
-  action: (_: LogoutResult | undefined) => Promise<LogoutResult>;
+  action: typeof logoutAction;
   className?: string;
 }) {
   const [state, formAction, pending] = useActionState(action, undefined);

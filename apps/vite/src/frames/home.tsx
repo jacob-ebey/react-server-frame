@@ -1,9 +1,9 @@
-import { loginAction, logoutAction } from "@/actions/auth";
 import { Document } from "@/components/document.tsx";
 import { LoginForm } from "@/components/login-form.tsx";
 import { LogoutForm } from "@/components/logout-form";
 import { Separator } from "@/components/ui/separator";
 import { getAuth } from "@/lib/auth";
+import { loginAction, logoutAction } from "@/lib/auth.actions";
 
 export default function Home() {
   const auth = getAuth();
