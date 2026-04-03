@@ -3,20 +3,20 @@ import { mapFrames, useServerMiddleware } from "react-server-frame/vite/frames";
 import { useCacheMiddleware } from "vite-plugin-react-use-cache/remix";
 
 import { asyncContext } from "remix/async-context-middleware";
-import { auth, createSessionAuthScheme } from "remix/auth-middleware";
 import { createCookie } from "remix/cookie";
-import { createRouter } from "remix/fetch-router";
+import { createRouter, type MiddlewareContext } from "remix/fetch-router";
 import { createMemoryFileStorage } from "remix/file-storage/memory";
 import { createCookieSessionStorage } from "remix/session/cookie-storage";
 import { session } from "remix/session-middleware";
 
-import { routes } from "./routes.ts";
+import { routes } from "@/routes";
+import atmosphere from "@/routes/atmosphere";
+import { authMiddleware } from "@/lib/auth";
+import { databaseMiddleware } from "@/lib/database";
 
-const About = lazy(() => import("./frames/about.tsx"));
-const Home = lazy(() => import("./frames/home.tsx"));
-const Sidebar = lazy(() => import("./frames/sidebar.tsx"));
+const Home = lazy(() => import("@/frames/home"));
 
-const SESSION_SECRET = import.meta.env.DEV ? "s3cr3t" : process.env.SESSION_SECRET;
+const SESSION_SECRET = process.env.SESSION_SECRET;
 
 if (!SESSION_SECRET) throw new Error("SESSION_SECRET environment variable is not set");
 
@@ -29,38 +29,27 @@ const sessionCookie = createCookie("__session", {
 
 const sessionStorage = createCookieSessionStorage();
 
+const middleware = [
+  asyncContext(),
+  session(sessionCookie, sessionStorage),
+  databaseMiddleware(),
+  authMiddleware(),
+];
+
 const router = createRouter({
-  middleware: [
-    asyncContext(),
-    session(sessionCookie, sessionStorage),
-    auth({
-      schemes: [
-        createSessionAuthScheme({
-          read(session) {
-            return session.get("auth") as { userId: string } | null;
-          },
-          verify(value) {
-            return value;
-          },
-          invalidate(session) {
-            session.unset("auth");
-          },
-        }),
-      ],
-    }),
-  ],
+  middleware,
 });
+
+router.map(routes.atmosphere, atmosphere);
 
 mapFrames(router, routes.frames, {
   middleware: [useCacheMiddleware(createMemoryFileStorage()), useServerMiddleware()],
   components: {
-    about: About,
     home: Home,
-    partials: {
-      sidebar: Sidebar,
-    },
   },
 });
+
+export type AppContext = MiddlewareContext<typeof middleware>;
 
 export default {
   async fetch(request: Request) {

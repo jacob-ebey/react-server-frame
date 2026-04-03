@@ -7,6 +7,9 @@
     "types": ["node", "react/canary", "react-dom/canary", "vite/client"],
     "jsx": "react-jsx",
     "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",

@@ -3,22 +3,37 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "postinstall": "node scripts/setup-env.ts",
     "dev": "vp dev",
     "build": "tsc && vp build",
     "check": "vp check",
-    "preview": "vp preview"
+    "preview": "vp preview",
+    "start": "node server.ts"
   },
   "dependencies": {
+    "@atcute/oauth-node-client": "catalog:",
+    "@base-ui/react": "catalog:",
+    "@fontsource-variable/jetbrains-mono": "catalog:",
+    "@fontsource-variable/oxanium": "catalog:",
+    "@phosphor-icons/react": "catalog:",
+    "better-sqlite3": "catalog:",
+    "class-variance-authority": "catalog:",
+    "clsx": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-server-dom-webpack": "catalog:",
     "react-server-frame": "workspace:",
-    "remix": "catalog:"
+    "remix": "catalog:",
+    "shadcn": "catalog:",
+    "tailwind-merge": "catalog:",
+    "tw-animate-css": "catalog:"
   },
   "devDependencies": {
     "@babel/core": "catalog:",
     "@rolldown/plugin-babel": "catalog:",
+    "@tailwindcss/vite": "catalog:",
     "@types/babel__core": "catalog:",
+    "@types/better-sqlite3": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
@@ -26,6 +41,7 @@
     "@vitejs/plugin-react": "catalog:",
     "@vitejs/plugin-rsc": "catalog:",
     "babel-plugin-react-compiler": "catalog:",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-devtools-json": "catalog:",

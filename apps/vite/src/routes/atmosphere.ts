@@ -1,0 +1,61 @@
+import { completeAuth, finishExternalAuth } from "remix/auth";
+import type { Controller } from "remix/fetch-router";
+import { redirect } from "remix/response/redirect";
+import { Session } from "remix/session";
+
+import type { AppContext } from "@/entry.server";
+import { routes } from "@/routes";
+import { atmosphereIdentifierSessionKey, createAuthProvider, type AuthSession } from "@/lib/auth";
+import { Database, eq } from "remix/data-table";
+import { profiles } from "@/data/schema";
+
+export default {
+  actions: {
+    async callback(context) {
+      const session = context.get(Session);
+      const identifier = normalizeAtmosphereIdentifier(
+        session.get(atmosphereIdentifierSessionKey) as string | null | undefined,
+      );
+
+      if (identifier == null) {
+        return redirect(
+          routes.frames.home.href() +
+            `?${new URLSearchParams({
+              error: "Could not finish login.",
+            })}`,
+        );
+      }
+
+      const provider = await createAuthProvider(identifier);
+      const { result, returnTo } = await finishExternalAuth(provider, context);
+      const authSession = completeAuth(context);
+
+      const { did, handle } = result.profile;
+
+      const displayName = handle ? handle.replace(/^(@|at:)/, "") : did;
+
+      const db = context.get(Database);
+      if ((await db.count(profiles, { where: eq(profiles.did, did) })) > 0) {
+        await db.update(profiles, did, {
+          displayName,
+        });
+      } else {
+        await db.create(profiles, {
+          did,
+          displayName,
+        });
+      }
+
+      authSession.set("auth", {
+        did: result.profile.did,
+      } satisfies AuthSession);
+
+      return redirect(returnTo || routes.frames.home.href());
+    },
+  },
+} satisfies Controller<typeof routes.atmosphere, AppContext>;
+
+function normalizeAtmosphereIdentifier(value: string | null | undefined): string | null {
+  let trimmed = value?.trim();
+  return trimmed ? trimmed : null;
+}

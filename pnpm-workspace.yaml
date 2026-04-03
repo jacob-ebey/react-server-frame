@@ -1,11 +1,60 @@
 packages:
   - apps/*
   - packages/*
+allowBuilds:
+  "@remix-run/assert": false
+  "@remix-run/async-context-middleware": false
+  "@remix-run/auth": false
+  "@remix-run/auth-middleware": false
+  "@remix-run/component": false
+  "@remix-run/compression-middleware": false
+  "@remix-run/cookie": false
+  "@remix-run/cop-middleware": false
+  "@remix-run/cors-middleware": false
+  "@remix-run/csrf-middleware": false
+  "@remix-run/data-schema": false
+  "@remix-run/data-table": false
+  "@remix-run/data-table-mysql": false
+  "@remix-run/data-table-postgres": false
+  "@remix-run/fetch-proxy": false
+  "@remix-run/fetch-router": false
+  "@remix-run/file-storage": false
+  "@remix-run/file-storage-s3": false
+  "@remix-run/form-data-middleware": false
+  "@remix-run/form-data-parser": false
+  "@remix-run/fs": false
+  "@remix-run/headers": false
+  "@remix-run/html-template": false
+  "@remix-run/lazy-file": false
+  "@remix-run/logger-middleware": false
+  "@remix-run/method-override-middleware": false
+  "@remix-run/mime": false
+  "@remix-run/multipart-parser": false
+  "@remix-run/node-fetch-server": false
+  "@remix-run/response": false
+  "@remix-run/route-pattern": false
+  "@remix-run/session": false
+  "@remix-run/session-middleware": false
+  "@remix-run/session-storage-memcache": false
+  "@remix-run/session-storage-redis": false
+  "@remix-run/static-middleware": false
+  "@remix-run/tar-parser": false
+  "@remix-run/test": false
+  better-sqlite3: true
+  esbuild: false
+  msw: false
 
 catalog:
+  "@atcute/oauth-node-client": ^1.1.0
   "@babel/core": ^7.29.0
+  "@base-ui/react": ^1.3.0
+  "@fontsource-variable/jetbrains-mono": ^5.2.8
+  "@fontsource-variable/oxanium": ^5.2.8
+  "@phosphor-icons/react": ^2.1.10
   "@rolldown/plugin-babel": ~0.2.2
+  "@tailwindcss/vite": ^4.2.2
   "@types/babel__core": ^7.20.5
+  "@types/better-sqlite3": ^7.6.13
   "@types/dom-navigation": ^1.0.7
   "@types/node": ^24
   "@types/react": ^19.2.14
@@ -14,13 +63,20 @@ catalog:
   "@vitejs/plugin-react": ^6.0.1
   "@vitejs/plugin-rsc": ~0.5.21
   "babel-plugin-react-compiler": ^1.0.0
+  better-sqlite3: ^12.8.0
+  class-variance-authority: ^0.7.1
+  clsx: ^2.1.1
   oxfmt: ^0.43.0
   oxlint: ^1.58.0
   react: canary
   react-dom: canary
   react-server-dom-webpack: canary
-  remix: 3.0.0-alpha.4
+  remix: remix-run/remix#preview/pr-11233&path:packages/remix
   rsc-html-stream: 0.0.7
+  shadcn: ^4.1.2
+  tailwind-merge: ^3.5.0
+  tailwindcss: ^4.2.2
+  tw-animate-css: ^1.4.0
   typescript: ^6.0.2
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vite-plugin-devtools-json: ^1.0.0

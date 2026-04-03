@@ -29,24 +29,21 @@ export function createServerCallback({
       }),
       { temporaryReferences },
     );
-    requestAnimationFrame(() => {
-      if (payload.type === "render") {
-        startTransition(() => {
-          setPayload(Promise.resolve(payload));
+
+    if (payload.type === "render") {
+      startTransition(() => {
+        setPayload(Promise.resolve(payload));
+      });
+    } else if (payload.type === "redirect") {
+      if (window.navigation) {
+        window.navigation.navigate(payload.redirect, {
+          history: "replace",
         });
+      } else {
+        window.location.href = payload.redirect;
       }
-      if (payload.type === "redirect") {
-        if (window.navigation) {
-          requestAnimationFrame(() => {
-            window.navigation.navigate(payload.redirect, {
-              history: "replace",
-            });
-          });
-        } else {
-          window.location.href = payload.redirect;
-        }
-      }
-    });
+    }
+
     return payload.returnValue;
   };
 }

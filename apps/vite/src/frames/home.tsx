@@ -1,30 +1,33 @@
-import { getContext } from "remix/async-context-middleware";
-import { Auth, type BadAuth, type GoodAuth } from "remix/auth-middleware";
-
-import { Document } from "../components/document.tsx";
-import { Login } from "../components/login.tsx";
-import { Logout } from "../components/logout.tsx";
-import { routes } from "../routes.ts";
+import { loginAction, logoutAction } from "@/actions/auth";
+import { Document } from "@/components/document.tsx";
+import { LoginForm } from "@/components/login-form.tsx";
+import { LogoutForm } from "@/components/logout-form";
+import { Separator } from "@/components/ui/separator";
+import { getAuth } from "@/lib/auth";
 
 export default function Home() {
-  const ctx = getContext();
-  const auth = ctx.get(Auth) as GoodAuth<{ userId: string }> | BadAuth;
+  const auth = getAuth();
 
   return (
     <Document>
-      <h1>Hello, World!</h1>
-      <p>
-        Go <a href={routes.frames.about.href()}>About</a>
-      </p>
-      <p>home {new Date().toISOString()}</p>
-      {auth.ok ? (
-        <>
-          <h2>Welcome {auth.identity.userId}</h2>
-          <Logout />
-        </>
-      ) : (
-        <Login />
-      )}
+      <main className="flex min-h-screen items-center justify-center p-4 py-24">
+        {auth.ok ? (
+          <div className="w-full max-w-md flex flex-col gap-6">
+            <div className="flex flex-col items-center gap-2 text-center">
+              <h1 className="text-xl font-bold">
+                Welcome{" "}
+                {auth.identity.displayName === auth.identity.did
+                  ? auth.identity.did
+                  : `@${auth.identity.displayName}`}
+              </h1>
+            </div>
+            <Separator />
+            <LogoutForm action={logoutAction} />
+          </div>
+        ) : (
+          <LoginForm action={loginAction} className="w-full max-w-md" />
+        )}
+      </main>
     </Document>
   );
 }
