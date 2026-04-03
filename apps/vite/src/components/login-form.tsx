@@ -13,9 +13,11 @@ import { cn } from "@/lib/utils";
 export function LoginForm({
   action,
   className,
+  handleOrDid,
   ...props
 }: React.ComponentProps<"div"> & {
   action: typeof loginAction;
+  handleOrDid?: string;
 }) {
   const [state, formAction, pending] = useActionState(action, undefined);
 
@@ -50,6 +52,7 @@ export function LoginForm({
             </FieldLabel>
             <Input
               name="handleOrDid"
+              defaultValue={handleOrDid}
               id={handleInputId}
               aria-labelledby={handleInputErrorId}
               type="text"

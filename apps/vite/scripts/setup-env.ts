@@ -2,8 +2,6 @@ import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
-import { generateClientAssertionKey } from "@atcute/oauth-node-client";
-
 const ensureEnvLocal = async (): Promise<string> => {
   const envPath = resolve(process.cwd(), ".env");
 
@@ -37,14 +35,10 @@ const upsertEnvVar = (input: string, key: string, value: string): string => {
 const envLocalPath = await ensureEnvLocal();
 const envLocal = await readFile(envLocalPath, "utf8");
 
-const jwk = await generateClientAssertionKey("main", "ES256");
-const jwkJson = JSON.stringify(jwk);
-
-const cookieSecret = crypto.randomUUID() + "-" + crypto.randomUUID();
+const sessionSecret = crypto.randomUUID() + "-" + crypto.randomUUID();
 
 let updated = envLocal;
-updated = upsertEnvVar(updated, "PRIVATE_KEY_JWK", `'${jwkJson}'`);
-updated = upsertEnvVar(updated, "COOKIE_SECRET", cookieSecret);
+updated = upsertEnvVar(updated, "SESSION_SECRET", sessionSecret);
 
 await writeFile(envLocalPath, updated);
 

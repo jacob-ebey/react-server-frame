@@ -2,11 +2,16 @@ import { Document } from "@/components/document.tsx";
 import { LoginForm } from "@/components/login-form.tsx";
 import { LogoutForm } from "@/components/logout-form";
 import { Separator } from "@/components/ui/separator";
-import { getAuth } from "@/lib/auth";
+import { atmosphereIdentifierSessionKey, getAuth } from "@/lib/auth";
 import { loginAction, logoutAction } from "@/lib/auth.actions";
+import { getContext } from "remix/async-context-middleware";
+import { Session } from "remix/session";
 
 export default function Home() {
+  const { get } = getContext();
   const auth = getAuth();
+  const session = get(Session);
+  const handleOrDid = session.get(atmosphereIdentifierSessionKey) as string | undefined;
 
   return (
     <Document>
@@ -25,7 +30,7 @@ export default function Home() {
             <LogoutForm action={logoutAction} />
           </div>
         ) : (
-          <LoginForm action={loginAction} className="w-full max-w-md" />
+          <LoginForm action={loginAction} handleOrDid={handleOrDid} className="w-full max-w-md" />
         )}
       </main>
     </Document>

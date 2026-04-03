@@ -26,6 +26,8 @@ export default {
         );
       }
 
+      session.unset(atmosphereIdentifierSessionKey);
+
       const provider = await createAuthProvider(identifier);
       const { result, returnTo } = await finishExternalAuth(provider, context);
       const authSession = completeAuth(context);

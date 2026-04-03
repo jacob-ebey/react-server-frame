@@ -9,6 +9,7 @@ import { createMemoryFileStorage } from "remix/file-storage/memory";
 import { createCookieSessionStorage } from "remix/session/cookie-storage";
 import { session } from "remix/session-middleware";
 
+import { sessionSecret } from "@/env";
 import { routes } from "@/routes";
 import atmosphere from "@/routes/atmosphere";
 import { authMiddleware } from "@/lib/auth";
@@ -16,12 +17,8 @@ import { databaseMiddleware } from "@/lib/database";
 
 const Home = lazy(() => import("@/frames/home"));
 
-const SESSION_SECRET = process.env.SESSION_SECRET;
-
-if (!SESSION_SECRET) throw new Error("SESSION_SECRET environment variable is not set");
-
 const sessionCookie = createCookie("__session", {
-  secrets: [SESSION_SECRET],
+  secrets: [sessionSecret],
   httpOnly: true,
   secure: true,
   sameSite: "Lax",

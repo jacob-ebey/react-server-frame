@@ -2,10 +2,10 @@ import { auth, createSessionAuthScheme } from "remix/auth-middleware";
 import * as s from "remix/data-schema";
 import { Database } from "remix/data-table";
 
-import { profiles } from "@/data/schema";
 import { createAtmosphereAuthProvider } from "remix/auth";
 import { Auth, type BadAuth, type GoodAuth } from "remix/auth-middleware";
-import { createMemoryFileStorage } from "remix/file-storage/memory";
+import { profiles } from "@/data/schema";
+import { sessionSecret } from "@/env";
 import { routes } from "@/routes";
 import { getContext } from "remix/async-context-middleware";
 
@@ -55,8 +55,6 @@ export function authMiddleware() {
   });
 }
 
-const fileStorage = createMemoryFileStorage();
-
 export function createAuthProvider(handleOrDid: string) {
   const { request } = getContext();
   const url = new URL(request.url);
@@ -66,7 +64,7 @@ export function createAuthProvider(handleOrDid: string) {
   return createAtmosphereAuthProvider(handleOrDid, {
     clientId: "http://localhost",
     redirectUri,
-    fileStorage,
+    sessionSecret,
     scopes: ["atproto"],
   });
 }

@@ -11,7 +11,6 @@
     "start": "node server.ts"
   },
   "dependencies": {
-    "@atcute/oauth-node-client": "catalog:",
     "@base-ui/react": "catalog:",
     "@fontsource-variable/jetbrains-mono": "catalog:",
     "@fontsource-variable/oxanium": "catalog:",
@@ -24,9 +23,7 @@
     "react-server-dom-webpack": "catalog:",
     "react-server-frame": "workspace:",
     "remix": "catalog:",
-    "shadcn": "catalog:",
-    "tailwind-merge": "catalog:",
-    "tw-animate-css": "catalog:"
+    "tailwind-merge": "catalog:"
   },
   "devDependencies": {
     "@babel/core": "catalog:",
@@ -41,7 +38,9 @@
     "@vitejs/plugin-react": "catalog:",
     "@vitejs/plugin-rsc": "catalog:",
     "babel-plugin-react-compiler": "catalog:",
+    "shadcn": "catalog:",
     "tailwindcss": "catalog:",
+    "tw-animate-css": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-devtools-json": "catalog:",

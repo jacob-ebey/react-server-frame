@@ -2,11 +2,10 @@ import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import rsc from "@vitejs/plugin-rsc";
+import { reactServerFrame } from "react-server-frame/vite/plugin";
 import devtoolsJson from "vite-plugin-devtools-json";
 import { useCachePlugin } from "vite-plugin-react-use-cache";
 import { defineConfig } from "vite-plus";
-
-import { reactServerFrame } from "react-server-frame/vite/plugin";
 
 export default defineConfig({
   server: {

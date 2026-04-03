@@ -57,7 +57,7 @@
   },
   "peerDependencies": {
     "@vitejs/plugin-rsc": "*",
-    "react": "*:",
+    "react": "*",
     "react-dom": "*",
     "remix": "*",
     "vite": "*"
