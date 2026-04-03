@@ -68,9 +68,9 @@ catalog:
   clsx: ^2.1.1
   oxfmt: ^0.43.0
   oxlint: ^1.58.0
-  react: canary
-  react-dom: canary
-  react-server-dom-webpack: canary
+  react: 19.2.4
+  react-dom: 19.2.4
+  react-server-dom-webpack: 19.2.4
   remix: remix-run/remix#preview/pr-11233&path:packages/remix
   rsc-html-stream: 0.0.7
   shadcn: ^4.1.2
