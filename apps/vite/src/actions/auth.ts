@@ -21,7 +21,7 @@ export async function logoutAction(): Promise<LogoutResult> {
     redirect(routes.frames.home.href());
     return {
       success: true,
-      message: "Logged out successfully.",
+      message: "Redirecting...",
     };
   } catch (reason) {
     console.error(reason);
