@@ -11,7 +11,7 @@ import { RoutePattern } from "remix/route-pattern";
 export function mapFrames<Frames extends Routes>(
   router: Router<any>,
   frames: Frames,
-  { components, middleware }: { middleware?: Middleware[]; components: Components<Frames> },
+  { components, middleware = [] }: { middleware?: Middleware[]; components: Components<Frames> },
   config: {
     createTemporaryReferenceSet: () => unknown;
     fetchFrame: (url: URL, signal: AbortSignal) => Promise<React.ReactNode>;
@@ -19,18 +19,17 @@ export function mapFrames<Frames extends Routes>(
     renderToReadableStream: (
       payload: any,
       options?: {
-        temporaryReferences: unknown;
-        onError: (error: unknown) => string | undefined;
+        temporaryReferences?: unknown;
+        onError?: (error: unknown) => string | undefined;
       },
     ) => ReadableStream<Uint8Array>;
   },
 ) {
+  const { createTemporaryReferenceSet, fetchFrame, prerender, renderToReadableStream } = config;
+
   for (let [key, frame] of Object.entries(frames)) {
     if (typeof (frame as Route).pattern?.test === "function") {
       const handler: RequestHandler = ({ request }) => {
-        const { createTemporaryReferenceSet, fetchFrame, prerender, renderToReadableStream } =
-          config;
-
         return render({
           createTemporaryReferenceSet,
           prerender,
@@ -44,10 +43,19 @@ export function mapFrames<Frames extends Routes>(
         });
       };
 
+      const localMiddleware =
+        typeof components[key] === "function"
+          ? []
+          : ((components[key].middleware ?? []) as Middleware[]);
+
       const action = {
         action: handler,
         handler,
-        middleware,
+        middleware: [
+          reactRedirectsMiddleware(renderToReadableStream),
+          ...middleware,
+          ...localMiddleware,
+        ],
       };
 
       let route = frame.pattern as RoutePattern<string>;
@@ -90,6 +98,33 @@ export class RedirectState {
   constructor(location: string) {
     this.location = location;
   }
+}
+
+export function reactRedirectsMiddleware(
+  renderToReadableStream: (
+    payload: any,
+    options?: {
+      temporaryReferences?: unknown;
+      onError?: (error: unknown) => string | undefined;
+    },
+  ) => ReadableStream<Uint8Array>,
+): Middleware {
+  return async ({ request }, next) => {
+    const response = await next();
+    const url = new URL(request.url);
+    let redirect: string | null;
+    if (isReactRequest(url) && (redirect = getRedirect(response))) {
+      const payload: Payload = {
+        type: "redirect",
+        redirect,
+      };
+      return new Response(renderToReadableStream(payload), {
+        headers: {
+          "Content-Type": "text/x-component; charset=utf-8",
+        },
+      });
+    }
+  };
 }
 
 export function useServerMiddleware({
@@ -149,7 +184,18 @@ export function useServerMiddleware({
   };
 }
 
-export function redirect(location: string) {
+export function redirect(locationOrRedirect: string | Response) {
+  let location: string | null;
+  if (typeof locationOrRedirect === "string") {
+    location = locationOrRedirect;
+  } else {
+    location = getRedirect(locationOrRedirect);
+  }
+
+  if (!location) {
+    throw new Error("No redirect location provided");
+  }
+
   const ctx = getContext();
   ctx.set(RedirectState, new RedirectState(location));
 }
@@ -213,7 +259,7 @@ export async function render({
     });
 
     const url = new URL(request.url);
-    if (url.pathname.endsWith(".rsc")) {
+    if (isReactRequest(url)) {
       return new Response(body, {
         headers: {
           "Content-Type": "text/x-component; charset=utf-8",
@@ -252,7 +298,14 @@ export class NotFoundError extends Error {
 interface Routes extends Record<string, Route | Routes> {}
 
 type Components<R extends Routes> = {
-  [K in keyof R]: R[K] extends Routes ? Components<R[K]> : React.ComponentType;
+  [K in keyof R]: R[K] extends Routes
+    ? Components<R[K]>
+    :
+        | React.ComponentType
+        | {
+            middleware?: Middleware[];
+            component: React.ComponentType;
+          };
 };
 
 export type ProvideFramesProps<Frames extends Routes> = {
@@ -281,7 +334,7 @@ export function Frame({ src }: { src: string }) {
   if (!cache.components || !cache.frames) throw new Error("No frames provided");
 
   const url = new URL(src, "http://react-server-frame/");
-  if (url.pathname.endsWith(".rsc")) {
+  if (isReactRequest(url)) {
     url.pathname = url.pathname.slice(0, -4);
   }
 
@@ -301,11 +354,25 @@ function match(
   href: string,
 ): React.ComponentType | undefined {
   for (const [id, route] of Object.entries(frames)) {
-    if (typeof (route as Route).pattern?.test === "function") {
-      if ((route as Route).pattern.test(href)) return components?.[id] as React.ComponentType;
+    if (
+      typeof (route as Route).pattern?.test === "function" &&
+      (route as Route).pattern.test(href)
+    ) {
+      return typeof components?.[id] === "object" && components[id].component
+        ? components[id].component
+        : (components[id] as React.ComponentType);
     } else {
       let matched = match(route as Routes, components?.[id] as unknown as Components<Routes>, href);
       if (matched) return matched;
     }
   }
+}
+
+function isReactRequest(url: URL) {
+  return url.pathname.endsWith(".rsc");
+}
+
+function getRedirect(response: Response) {
+  if (response.status < 300 || response.status >= 400) return null;
+  return response.headers.get("Location");
 }

@@ -10,6 +10,7 @@
     "jsx": "react-jsx",
     "strict": true,
     "noUnusedLocals": true,
+    "declarationMap": true,
     "declaration": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
