@@ -70,7 +70,7 @@ catalog:
   react: 19.2.4
   react-dom: 19.2.4
   react-server-dom-webpack: 19.2.4
-  remix: remix-run/remix#preview/pr-11233&path:packages/remix
+  remix: remix-run/remix?1#preview/pr-11233&path:packages/remix
   rsc-html-stream: 0.0.7
   shadcn: ^4.1.2
   tailwind-merge: ^3.5.0

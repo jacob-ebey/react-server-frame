@@ -8,6 +8,7 @@ import { routes } from "@/routes";
 import { atmosphereIdentifierSessionKey, createAuthProvider, type AuthSession } from "@/lib/auth";
 import { Database, eq } from "remix/data-table";
 import { profiles } from "@/data/schema";
+import { createFetch } from "remix/dpop-fetch";
 
 export default {
   actions: {
@@ -28,31 +29,52 @@ export default {
 
       session.unset(atmosphereIdentifierSessionKey);
 
-      const provider = await createAuthProvider(identifier);
-      const { result, returnTo } = await finishExternalAuth(provider, context);
-      const authSession = completeAuth(context);
+      try {
+        const provider = await createAuthProvider(identifier);
+        const { result, returnTo } = await finishExternalAuth(provider, context);
+        const authSession = completeAuth(context);
 
-      const { did, handle } = result.profile;
+        let fetchAtmosphere = createFetch(result.tokens);
 
-      const displayName = handle ? handle.replace(/^(@|at:)/, "") : did;
+        let url = new URL("/xrpc/com.atproto.repo.getRecord", result.profile.pdsUrl);
+        url.searchParams.set("repo", result.profile.did);
+        url.searchParams.set("collection", "app.bsky.actor.profile");
+        url.searchParams.set("rkey", "self");
+        let bskyDisplayName = await fetchAtmosphere(url)
+          .then((response) => response.json())
+          .then((res) => res?.value?.displayName?.trim())
+          .catch(() => null);
 
-      const db = context.get(Database);
-      if ((await db.count(profiles, { where: eq(profiles.did, did) })) > 0) {
-        await db.update(profiles, did, {
-          displayName,
-        });
-      } else {
-        await db.create(profiles, {
-          did,
-          displayName,
-        });
+        const { did, handle } = result.profile;
+
+        const displayName = bskyDisplayName || handle?.replace(/^(@|at:)/, "") || did;
+
+        const db = context.get(Database);
+        if ((await db.count(profiles, { where: eq(profiles.did, did) })) > 0) {
+          await db.update(profiles, did, {
+            displayName,
+          });
+        } else {
+          await db.create(profiles, {
+            did,
+            displayName,
+          });
+        }
+
+        authSession.set("auth", {
+          did: result.profile.did,
+        } satisfies AuthSession);
+
+        return redirect(returnTo || routes.frames.home.href());
+      } catch (reason) {
+        console.error(reason);
+        return redirect(
+          routes.frames.home.href() +
+            `?${new URLSearchParams({
+              error: "Authentication failed.",
+            })}`,
+        );
       }
-
-      authSession.set("auth", {
-        did: result.profile.did,
-      } satisfies AuthSession);
-
-      return redirect(returnTo || routes.frames.home.href());
     },
   },
 } satisfies Controller<typeof routes.atmosphere, AppContext>;
