@@ -36,9 +36,11 @@ const envLocalPath = await ensureEnvLocal();
 const envLocal = await readFile(envLocalPath, "utf8");
 
 const sessionSecret = crypto.randomUUID() + "-" + crypto.randomUUID();
+const tokensSecret = crypto.randomUUID() + "-" + crypto.randomUUID();
 
 let updated = envLocal;
 updated = upsertEnvVar(updated, "SESSION_SECRET", sessionSecret);
+updated = upsertEnvVar(updated, "TOKENS_SECRET", tokensSecret);
 
 await writeFile(envLocalPath, updated);
 

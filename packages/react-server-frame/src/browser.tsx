@@ -65,8 +65,7 @@ function Content({ initialPayload }: { initialPayload: Promise<Payload> }) {
         ).then(() => {});
         seenPayloads.set(payload, Promise.resolve(promise));
       }
-      use(seenPayloads.get(payload)!);
-      return null;
+      throw seenPayloads.get(payload)!;
     } else {
       window.location.href = payload.redirect;
       return null;
@@ -88,17 +87,15 @@ export function hydrate({
 }) {
   createFromReadableStream(rscStream).then(
     (payload) =>
-      startTransition(() => {
-        hydrateRoot(
-          document,
-          <StrictMode>
-            <Content initialPayload={Promise.resolve(payload)} />
-          </StrictMode>,
-          {
-            formState: payload.formState,
-          },
-        );
-      }),
+      hydrateRoot(
+        document,
+        <StrictMode>
+          <Content initialPayload={Promise.resolve(payload)} />
+        </StrictMode>,
+        {
+          formState: payload.formState,
+        },
+      ),
     (reason) => console.error("Failed to hydrate root", reason),
   );
 
@@ -148,7 +145,9 @@ export function hydrate({
 
     event.intercept({
       async handler() {
-        await navigate(event.destination.url);
+        const promise = navigate(event.destination.url);
+        startTransition(() => promise);
+        return promise;
       },
     });
   });
@@ -156,7 +155,7 @@ export function hydrate({
   if (import.meta.hot) {
     import.meta.hot.on("rsc:update", (e) => {
       console.log("[vite-rsc:update]", e.file);
-      void navigate(location.href);
+      startTransition(() => navigate(location.href));
     });
   }
 }

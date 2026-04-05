@@ -3,6 +3,7 @@ import { mapFrames, useServerMiddleware } from "react-server-frame/vite/frames";
 import { useCacheMiddleware } from "vite-plugin-react-use-cache/remix";
 
 import { asyncContext } from "remix/async-context-middleware";
+import { requireAuth } from "remix/auth-middleware";
 import { createCookie } from "remix/cookie";
 import { createRouter, type MiddlewareContext } from "remix/fetch-router";
 import { createMemoryFileStorage } from "remix/file-storage/memory";
@@ -14,8 +15,10 @@ import { routes } from "@/routes";
 import atmosphere from "@/routes/atmosphere";
 import { authMiddleware } from "@/lib/auth";
 import { databaseMiddleware } from "@/lib/database";
+import { redirect } from "remix/response/redirect";
 
 const Home = lazy(() => import("@/frames/home"));
+const Protected = lazy(() => import("@/frames/protected"));
 
 const sessionCookie = createCookie("__session", {
   secrets: [sessionSecret],
@@ -43,6 +46,16 @@ mapFrames(router, routes.frames, {
   middleware: [useCacheMiddleware(createMemoryFileStorage()), useServerMiddleware()],
   components: {
     home: Home,
+    protected: {
+      middleware: [
+        requireAuth({
+          onFailure() {
+            return redirect(routes.frames.home.href());
+          },
+        }),
+      ],
+      component: Protected,
+    },
   },
 });
 

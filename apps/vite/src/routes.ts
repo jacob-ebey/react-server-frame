@@ -6,5 +6,6 @@ export const routes = route({
   },
   frames: {
     home: "/",
+    protected: "/protected",
   },
 });

@@ -1,17 +1,23 @@
 import { cache } from "react";
 import type { ReactFormState } from "react-dom/client";
 import { getContext } from "remix/async-context-middleware";
-import type { Middleware, RequestHandler, Router } from "remix/fetch-router";
+import type { Middleware, RequestContext, RequestHandler, Router } from "remix/fetch-router";
 import type { Route } from "remix/fetch-router/routes";
 
 import { ClientFrame, FetchFrameProvider } from "./frames.client.tsx";
 import type { Payload } from "./generic-payload.ts";
 import { RoutePattern } from "remix/route-pattern";
 
-export function mapFrames<Frames extends Routes>(
-  router: Router<any>,
+export function mapFrames<
+  Context extends RequestContext<any, any> = RequestContext<{}, []>,
+  Frames extends Routes = {},
+>(
+  router: Router<Context>,
   frames: Frames,
-  { components, middleware = [] }: { middleware?: Middleware[]; components: Components<Frames> },
+  {
+    components,
+    middleware = [],
+  }: { middleware?: Middleware<any, any, any>[]; components: Components<Frames> },
   config: {
     createTemporaryReferenceSet: () => unknown;
     fetchFrame: (url: URL, signal: AbortSignal) => Promise<React.ReactNode>;
@@ -303,7 +309,7 @@ type Components<R extends Routes> = {
     :
         | React.ComponentType
         | {
-            middleware?: Middleware[];
+            middleware?: Middleware<any, any, any>[];
             component: React.ComponentType;
           };
 };
@@ -341,6 +347,7 @@ export function Frame({ src }: { src: string }) {
   const Component = match(cache.frames, cache.components, url.href);
   if (!Component) throw new NotFoundError("No matching frame found");
 
+  console.log(Component);
   return (
     <ClientFrame src={url.pathname + url.search}>
       <Component />
@@ -354,13 +361,12 @@ function match(
   href: string,
 ): React.ComponentType | undefined {
   for (const [id, route] of Object.entries(frames)) {
-    if (
-      typeof (route as Route).pattern?.test === "function" &&
-      (route as Route).pattern.test(href)
-    ) {
-      return typeof components?.[id] === "object" && components[id].component
-        ? components[id].component
-        : (components[id] as React.ComponentType);
+    if (typeof (route as Route).pattern?.test === "function") {
+      if ((route as Route).pattern.test(href)) {
+        return typeof components?.[id] === "object" && components[id].component
+          ? components[id].component
+          : (components[id] as React.ComponentType);
+      }
     } else {
       let matched = match(route as Routes, components?.[id] as unknown as Components<Routes>, href);
       if (matched) return matched;

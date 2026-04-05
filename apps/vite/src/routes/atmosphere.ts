@@ -5,7 +5,12 @@ import { Session } from "remix/session";
 
 import type { AppContext } from "@/entry.server";
 import { routes } from "@/routes";
-import { atmosphereIdentifierSessionKey, createAuthProvider, type AuthSession } from "@/lib/auth";
+import {
+  atmosphereIdentifierSessionKey,
+  createAuthProvider,
+  saveTokens,
+  type AuthSession,
+} from "@/lib/auth";
 import { Database, eq } from "remix/data-table";
 import { profiles } from "@/data/schema";
 import { createFetch } from "remix/dpop-fetch";
@@ -32,15 +37,16 @@ export default {
       try {
         const provider = await createAuthProvider(identifier);
         const { result, returnTo } = await finishExternalAuth(provider, context);
-        const authSession = completeAuth(context);
 
-        let fetchAtmosphere = createFetch(result.tokens);
+        await saveTokens(result.profile.did, result.tokens);
 
-        let url = new URL("/xrpc/com.atproto.repo.getRecord", result.profile.pdsUrl);
+        const fetchAtmosphere = createFetch(result.tokens);
+
+        const url = new URL("/xrpc/com.atproto.repo.getRecord", result.profile.pdsUrl);
         url.searchParams.set("repo", result.profile.did);
         url.searchParams.set("collection", "app.bsky.actor.profile");
         url.searchParams.set("rkey", "self");
-        let bskyDisplayName = await fetchAtmosphere(url)
+        const bskyDisplayName = await fetchAtmosphere(url)
           .then((response) => response.json())
           .then((res) => res?.value?.displayName?.trim())
           .catch(() => null);
@@ -61,6 +67,7 @@ export default {
           });
         }
 
+        const authSession = completeAuth(context);
         authSession.set("auth", {
           did: result.profile.did,
         } satisfies AuthSession);
